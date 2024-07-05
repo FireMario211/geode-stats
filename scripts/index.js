@@ -1,0 +1,41 @@
+function modToName(mod) {
+    return `<a href="https://geode-sdk.org/mods/${mod.id}">${mod.name} by ${mod.developer}</a>`;
+}
+
+function convertGD(gd) {
+    return {
+        win: gd.win == "2.206" || gd.win == "*",
+        android32: gd.android32 == "2.206" || gd.android32 == "*",
+        android64: gd.android64 == "2.206" || gd.android64 == "*",
+        "mac-intel": gd["mac-intel"] == "2.206" || gd["mac-intel"] == "*",
+        "mac-arm": gd["mac-arm"] == "2.206" || gd["mac-arm"] == "*"
+    }
+}
+
+function responseToMod(response) {
+    return {
+        id: response.id,
+        name: response.versions[0].name,
+        description: response.versions[0].description,
+        developer: response.developers.filter(x => x.is_owner)[0].display_name,
+        gd: convertGD(response.versions[0].gd),
+        downloads: response.downloads,
+        latestDownloads: response.versions[0].downloads,
+        version: response.versions[0].version,
+        featured: response.featured
+    }
+}
+
+async function getMods(gd, geode) {
+    const mods = [];
+
+    const page1 = await fetch(`https://api.geode-sdk.org/v1/mods?gd=${gd}&geode=${geode}&per_page=100`).then(r => r.json());
+    mods.push(...page1.payload.data.map(responseToMod));
+    const maxPage = Math.ceil(page1.payload.count / 100);
+    for (let i = 2; i <= maxPage; i++) {
+        const page = await fetch(`https://api.geode-sdk.org/v1/mods?gd=${gd}&geode=${geode}&per_page=100&page=${i}`).then(r => r.json());
+        mods.push(...page.payload.data.map(responseToMod));
+    }
+
+    return mods;
+}

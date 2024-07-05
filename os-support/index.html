@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/os-support.css">
+    <meta property="og:title" content="OS Support - Geode Statistics" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://geode-stats.hiimjustin000.com" />
+    <meta property="og:description" content="Support for different operating systems in Geode, a Geometry Dash mod loader." />
+    <meta name="theme-color" content="#8E7AD0">
+    <title>OS Support - Geode Statistics</title>
+</head>
+<body>
+    <nav>
+        <img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo">
+        <p id="title">Geode Statistics</p>
+        <ul>
+            <li><a href="..">Home</a></li>
+            <li><a href="#">Statistics</a>
+                <ul>
+                    <li><a href="#">OS Support</a></li>
+                    <li><a href="../os-percentage">OS Percentage</a></li>
+                    <li><a href="../dev-leaderboard">Developer Leaderboard</a></li>
+                </ul>
+            </li>
+        </ul>
+        <img id="author-logo" src="../images/justin-cube.png" alt="Author Logo">
+        <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
+    </nav>
+
+    <h1 class="centered">Operating System Support</h1>
+    <div class="centered" id="operating-systems">
+        <div>
+            <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
+            <p class="os-stats" id="windows-stats"></p>
+        </div>
+        <div>
+            <img src="../images/android.svg" class="os-icon" alt="Android Logo">
+            <p class="os-stats" id="android-stats"></p>
+        </div>
+        <div>
+            <img src="../images/apple.svg" class="os-icon" alt="Apple Logo">
+            <p class="os-stats" id="macos-stats"></p>
+        </div>
+    </div>
+    <footer class="centered">
+        <p>
+            Website by <a href="https://www.hiimjustin000.com">hiimjustin000</a>. This website is not affiliated with
+            <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
+        </p>
+    </footer>
+    <script src="../scripts/index.js"></script>
+    <script type="module">
+        const osSupport = {
+            windows: 0,
+            android: 0,
+            android32: 0,
+            android64: 0,
+            android32and64: 0,
+            macOS: 0,
+            macOSIntel: 0,
+            macOSARM: 0,
+            macOSIntelAndARM: 0
+        };
+
+        const mods = await getMods("2.206", "3.1.1");
+
+        for (const mod of mods) {
+            if (mod.gd.win) osSupport.windows++;
+            if (mod.gd.android32) osSupport.android32++;
+            if (mod.gd.android64) osSupport.android64++;
+            if (mod.gd.android32 || mod.gd.android64) osSupport.android++;
+            if (mod.gd.android32 && mod.gd.android64) osSupport.android32and64++;
+            if (mod.gd["mac-intel"]) osSupport.macOSIntel++;
+            if (mod.gd["mac-arm"]) osSupport.macOSARM++;
+            if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSupport.macOS++;
+            if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSupport.macOSIntelAndARM++;
+        }
+
+        const onlySupport = {
+            onlyWindows: [],
+            onlyAndroid: [],
+            androidOnly32: [],
+            androidOnly64: [],
+            onlyMacOS: [],
+            macOSOnlyIntel: [],
+            macOSOnlyARM: []
+        }
+
+        for (const mod of mods) {
+            if (mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) onlySupport.onlyWindows.push(mod);
+            if (!mod.gd.win && (mod.gd.android32 || mod.gd.android64) && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) onlySupport.onlyAndroid.push(mod);
+            if (!mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) onlySupport.onlyMacOS.push(mod);
+            if (mod.gd.android32 && !mod.gd.android64) onlySupport.androidOnly32.push(mod);
+            if (mod.gd.android64 && !mod.gd.android32) onlySupport.androidOnly64.push(mod);
+            if (mod.gd["mac-intel"] && !mod.gd["mac-arm"]) onlySupport.macOSOnlyIntel.push(mod);
+            if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) onlySupport.macOSOnlyARM.push(mod);
+        }
+
+        document.getElementById("windows-stats").innerHTML = `Windows: ${osSupport.windows}<br>
+        Windows-only:${onlySupport.onlyWindows.length > 0 ? `<br>${onlySupport.onlyWindows.map(modToName).join("<br>")}` : ""}`;
+        document.getElementById("android-stats").innerHTML = `Android: ${osSupport.android}<br>
+        32-bit: ${osSupport.android32}<br>
+        64-bit: ${osSupport.android64}<br>
+        32-bit and 64-bit: ${osSupport.android32and64}<br>
+        Android-only:${onlySupport.onlyAndroid.length > 0 ? `<br>${onlySupport.onlyAndroid.map(modToName).join("<br>")}` : ""}<br>
+        Only 32-bit:${onlySupport.androidOnly32.length > 0 ? `<br>${onlySupport.androidOnly32.map(modToName).join("<br>")}` : ""}<br>
+        Only 64-bit:${onlySupport.androidOnly64.length > 0 ? `<br>${onlySupport.androidOnly64.map(modToName).join("<br>")}` : ""}`;
+        document.getElementById("macos-stats").innerHTML = `macOS: ${osSupport.macOS}<br>
+        Intel: ${osSupport.macOSIntel}<br>
+        ARM: ${osSupport.macOSARM}<br>
+        Intel and ARM: ${osSupport.macOSIntelAndARM}<br>
+        macOS-only:${onlySupport.onlyMacOS.length > 0 ? `<br>${onlySupport.onlyMacOS.map(modToName).join("<br>")}` : ""}<br>
+        Only Intel:${onlySupport.macOSOnlyIntel.length > 0 ? `<br>${onlySupport.macOSOnlyIntel.map(modToName).join("<br>")}` : ""}<br>
+        Only ARM:${onlySupport.macOSOnlyARM.length > 0 ? `<br>${onlySupport.macOSOnlyARM.map(modToName).join("<br>")}` : ""}`;
+    </script>
+</body>
+</html>

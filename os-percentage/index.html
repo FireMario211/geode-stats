@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="../styles/os-percentage.css">
+    <meta property="og:title" content="OS Percentage - Geode Statistics" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://geode-stats.hiimjustin000.com" />
+    <meta property="og:description" content="Percentage of mods that support different operating systems in Geode, a Geometry Dash mod loader." />
+    <meta name="theme-color" content="#8E7AD0">
+    <title>OS Percentage - Geode Statistics</title>
+</head>
+<body>
+    <nav>
+        <img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo">
+        <p id="title">Geode Statistics</p>
+        <ul>
+            <li><a href="..">Home</a></li>
+            <li><a href="#">Statistics</a>
+                <ul>
+                    <li><a href="../os-support">OS Support</a></li>
+                    <li><a href="#">OS Percentage</a></li>
+                    <li><a href="../dev-leaderboard">Developer Leaderboard</a></li>
+                </ul>
+            </li>
+        </ul>
+        <img id="author-logo" src="../images/justin-cube.png" alt="Author Logo">
+        <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
+    </nav>
+
+    <h1 class="centered">Operating System Percentage</h1>
+    <div id="operating-systems">
+        <div class="os-bars">
+            <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
+            <div id="windows-bar-completed" class="os-bar-completed"></div>
+            <div id="windows-bar-remaining" class="os-bar-remaining"></div>
+            <p id="windows-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <img src="../images/android.svg" class="os-icon" alt="Android Logo">
+            <div id="android-bar-completed" class="os-bar-completed"></div>
+            <div id="android-bar-remaining" class="os-bar-remaining"></div>
+            <p id="android-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <p id="android-32-label" class="android-label">32</p>
+            <div id="android-32-bar-completed" class="os-bar-completed"></div>
+            <div id="android-32-bar-remaining" class="os-bar-remaining"></div>
+            <p id="android-32-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <p id="android-64-label" class="android-label">64</p>
+            <div id="android-64-bar-completed" class="os-bar-completed"></div>
+            <div id="android-64-bar-remaining" class="os-bar-remaining"></div>
+            <p id="android-64-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <p id="android-32-64-label" class="android-label">Both</p>
+            <div id="android-32-64-bar-completed" class="os-bar-completed"></div>
+            <div id="android-32-64-bar-remaining" class="os-bar-remaining"></div>
+            <p id="android-32-64-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <img src="../images/apple.svg" class="os-icon" alt="Apple Logo">
+            <div id="macos-bar-completed" class="os-bar-completed"></div>
+            <div id="macos-bar-remaining" class="os-bar-remaining"></div>
+            <p id="macos-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <p id="macos-intel-label" class="macos-label">Intel</p>
+            <div id="macos-intel-bar-completed" class="os-bar-completed"></div>
+            <div id="macos-intel-bar-remaining" class="os-bar-remaining"></div>
+            <p id="macos-intel-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <p id="macos-arm-label" class="macos-label">ARM</p>
+            <div id="macos-arm-bar-completed" class="os-bar-completed"></div>
+            <div id="macos-arm-bar-remaining" class="os-bar-remaining"></div>
+            <p id="macos-arm-percentage" class="os-percentage"></p>
+        </div>
+        <div class="os-bars">
+            <p id="macos-intel-arm-label" class="macos-label">Both</p>
+            <div id="macos-intel-arm-bar-completed" class="os-bar-completed"></div>
+            <div id="macos-intel-arm-bar-remaining" class="os-bar-remaining"></div>
+            <p id="macos-intel-arm-percentage" class="os-percentage"></p>
+        </div>
+    </div>
+    <footer class="centered">
+        <p>
+            Website by <a href="https://www.hiimjustin000.com">hiimjustin000</a>. This website is not affiliated with
+            <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
+        </p>
+    </footer>
+    <script src="../scripts/index.js"></script>
+    <script type="module">
+        const osSums = {
+            windows: 0,
+            android: 0,
+            android32: 0,
+            android64: 0,
+            android32and64: 0,
+            macOS: 0,
+            macOSIntel: 0,
+            macOSARM: 0,
+            macOSIntelAndARM: 0
+        }
+
+        const mods = await getMods("2.206", "3.1.1");
+
+        for (const mod of mods) {
+            if (mod.gd.win) osSums.windows++;
+            if (mod.gd.android32 || mod.gd.android64) osSums.android++;
+            if (mod.gd.android32) osSums.android32++;
+            if (mod.gd.android64) osSums.android64++;
+            if (mod.gd.android32 && mod.gd.android64) osSums.android32and64++;
+            if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSums.macOS++;
+            if (mod.gd["mac-intel"]) osSums.macOSIntel++;
+            if (mod.gd["mac-arm"]) osSums.macOSARM++;
+            if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSums.macOSIntelAndARM++;
+        }
+
+        const osPercentages = {
+            windows: osSums.windows / mods.length * 100,
+            android: osSums.android / mods.length * 100,
+            android32: osSums.android32 / mods.length * 100,
+            android64: osSums.android64 / mods.length * 100,
+            android32and64: osSums.android32and64 / mods.length * 100,
+            macOS: osSums.macOS / mods.length * 100,
+            macOSIntel: osSums.macOSIntel / mods.length * 100,
+            macOSARM: osSums.macOSARM / mods.length * 100,
+            macOSIntelAndARM: osSums.macOSIntelAndARM / mods.length * 100
+        }
+
+        document.getElementById("windows-bar-completed").style.width = osPercentages.windows * 0.7 + "%";
+        document.getElementById("windows-bar-remaining").style.width = 70 - osPercentages.windows * 0.7 + "%";
+        document.getElementById("windows-percentage").innerHTML = `${osPercentages.windows.toFixed(2)}%`;
+        document.getElementById("android-bar-completed").style.width = osPercentages.android * 0.7 + "%";
+        document.getElementById("android-bar-remaining").style.width = 70 - osPercentages.android * 0.7 + "%";
+        document.getElementById("android-percentage").innerHTML = `${osPercentages.android.toFixed(2)}%`;
+        document.getElementById("android-32-bar-completed").style.width = osPercentages.android32 * 0.7 + "%";
+        document.getElementById("android-32-bar-remaining").style.width = 70 - osPercentages.android32 * 0.7 + "%";
+        document.getElementById("android-32-percentage").innerHTML = `${osPercentages.android32.toFixed(2)}%`;
+        document.getElementById("android-64-bar-completed").style.width = osPercentages.android64 * 0.7 + "%";
+        document.getElementById("android-64-bar-remaining").style.width = 70 - osPercentages.android64 * 0.7 + "%";
+        document.getElementById("android-64-percentage").innerHTML = `${osPercentages.android64.toFixed(2)}%`;
+        document.getElementById("android-32-64-bar-completed").style.width = osPercentages.android32and64 * 0.7 + "%";
+        document.getElementById("android-32-64-bar-remaining").style.width = 70 - osPercentages.android32and64 * 0.7 + "%";
+        document.getElementById("android-32-64-percentage").innerHTML = `${osPercentages.android32and64.toFixed(2)}%`;
+        document.getElementById("macos-bar-completed").style.width = osPercentages.macOS * 0.7 + "%";
+        document.getElementById("macos-bar-remaining").style.width = 70 - osPercentages.macOS * 0.7 + "%";
+        document.getElementById("macos-percentage").innerHTML = `${osPercentages.macOS.toFixed(2)}%`;
+        document.getElementById("macos-intel-bar-completed").style.width = osPercentages.macOSIntel * 0.7 + "%";
+        document.getElementById("macos-intel-bar-remaining").style.width = 70 - osPercentages.macOSIntel * 0.7 + "%";
+        document.getElementById("macos-intel-percentage").innerHTML = `${osPercentages.macOSIntel.toFixed(2)}%`;
+        document.getElementById("macos-arm-bar-completed").style.width = osPercentages.macOSARM * 0.7 + "%";
+        document.getElementById("macos-arm-bar-remaining").style.width = 70 - osPercentages.macOSARM * 0.7 + "%";
+        document.getElementById("macos-arm-percentage").innerHTML = `${osPercentages.macOSARM.toFixed(2)}%`;
+        document.getElementById("macos-intel-arm-bar-completed").style.width = osPercentages.macOSIntelAndARM * 0.7 + "%";
+        document.getElementById("macos-intel-arm-bar-remaining").style.width = 70 - osPercentages.macOSIntelAndARM * 0.7 + "%";
+        document.getElementById("macos-intel-arm-percentage").innerHTML = `${osPercentages.macOSIntelAndARM.toFixed(2)}%`;
+    </script>
+</body>
+</html>

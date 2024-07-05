@@ -1,0 +1,17 @@
+.os-icon {
+    height: 100px;
+}
+
+.os-stats {
+    width: 300px;
+}
+
+#operating-systems {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+a {
+    color: white;
+}
