@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
+    <link rel="stylesheet" href="../styles/index.css">
+    <link rel="stylesheet" href="./index.css">
+    <meta property="og:title" content="Developer Leaderboard - Geode Statistics" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://geode-stats.hiimjustin000.com" />
+    <meta property="og:description" content="The leaderboard of developers with the most mods in Geode, a Geometry Dash mod loader." />
+    <meta name="theme-color" content="#8E7AD0">
+    <title>Developer Leaderboard - Geode Statistics</title>
+</head>
+<body>
+    <nav>
+        <img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo">
+        <p id="title">Geode Statistics</p>
+        <ul>
+            <li><a href="..">Home</a></li>
+            <li><a href="#">Statistics</a>
+                <ul>
+                    <li><a href="../os-support">OS Support</a></li>
+                    <li><a href="../os-percentage">OS Percentage</a></li>
+                    <li><a href="#">Developer Leaderboard</a></li>
+                </ul>
+            </li>
+        </ul>
+        <img id="author-logo" src="../images/justin-cube.png" alt="Author Logo">
+        <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
+    </nav>
+
+    <h1 class="centered">Developer Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Developer</th>
+                <th>Developer Points</th>
+                <th>Total Mods</th>
+                <th>Unfeatured Mods</th>
+                <th>Featured Mods</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard"></tbody>
+    </table>
+    <!-- <footer class="centered">
+        <p>
+            Website by <a href="https://www.hiimjustin000.com">hiimjustin000</a>. This website is not affiliated with
+            <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
+        </p>
+    </footer> -->
+    <script src="../scripts/index.js"></script>
+    <script type="module">
+        const developerPoints = [];
+
+        const mods = await getMods();
+
+        for (const mod of mods) {
+            let found = developerPoints.find(x => x.id == mod.developer.id);
+            if (!found) {
+                developerPoints.push({
+                    id: mod.developer.id,
+                    name: mod.developer.display_name,
+                    points: 0,
+                    totalMods: 0,
+                    unfeaturedMods: 0,
+                    featuredMods: 0
+                });
+                found = developerPoints[developerPoints.length - 1];
+            }
+
+            found.points += mod.featured ? 2 : 1;
+            found.totalMods++;
+            if (mod.featured) found.featuredMods++;
+            else found.unfeaturedMods++;
+        }
+
+        developerPoints.sort((a, b) => b.points - a.points);
+        
+        let index = 0;
+        let rank = 0;
+        for (const developer of developerPoints) {
+            index++;
+            if (index == 1 || developer.points < developerPoints[index - 2].points) rank = index;
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${rank}</td>
+                <td>${developer.name}</td>
+                <td>${developer.points}</td>
+                <td>${developer.totalMods}</td>
+                <td>${developer.unfeaturedMods}</td>
+                <td>${developer.featuredMods}</td>
+            `;
+            document.getElementById("leaderboard").appendChild(row);
+        }
+    </script>
+</body>
+</html>

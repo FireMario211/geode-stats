@@ -67,7 +67,7 @@
             macOSIntelAndARM: 0
         };
 
-        const mods = await getMods("2.206", "3.2.0");
+        const mods = await getMods();
         const params = new URLSearchParams(window.location.search);
         const alphabetical = params.has("alphabetical") && params.get("alphabetical") == "1";
         if (alphabetical) mods.sort((a, b) => a.name.localeCompare(b.name));

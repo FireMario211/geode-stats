@@ -46,7 +46,7 @@
 }
 
 #macos-intel-arm-label {
-    margin-left: 30px;
+    margin-left: 34px;
 }
 
 a {
@@ -118,5 +118,5 @@ a {
 
 #macos-intel-arm-bar-completed {
     background-color: #000000;
-    margin-left: 67px;
+    margin-left: 63px;
 }
