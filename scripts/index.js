@@ -2,7 +2,7 @@ const GD_VERSION = "2.206";
 const GEODE_VERSION = "3.2.0";
 
 function modToName(mod) {
-    return `<a href="https://geode-sdk.org/mods/${mod.id}">${mod.name} by ${mod.developer}</a>`;
+    return `<a href="https://geode-sdk.org/mods/${mod.id}">${mod.name} by ${mod.developer.display_name}</a>`;
 }
 
 function convertGD(gd) {
