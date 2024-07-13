@@ -64,6 +64,7 @@
                 developerPoints.push({
                     id: mod.developer.id,
                     name: mod.developer.display_name,
+                    link: "https://geode-sdk.org/mods?developer=" + mod.developer.username,
                     points: 0,
                     totalMods: 0,
                     unfeaturedMods: 0,
@@ -86,13 +87,28 @@
             index++;
             if (index == 1 || developer.points < developerPoints[index - 2].points) rank = index;
             const row = document.createElement("tr");
+            switch (rank) {
+                case 1:
+                    row.style.backgroundColor = "gold";
+                    break;
+                case 2:
+                    row.style.backgroundColor = "silver";
+                    break;
+                case 3:
+                    row.style.backgroundColor = "sienna";
+                    break;
+                default:
+                    row.style.backgroundColor = "#383838";
+                    break;
+            }
+            const textStyle = `style="color: ${rank > 3 ? "white" : "black"};"`;
             row.innerHTML = `
-                <td>${rank}</td>
-                <td>${developer.name}</td>
-                <td>${developer.points}</td>
-                <td>${developer.totalMods}</td>
-                <td>${developer.unfeaturedMods}</td>
-                <td>${developer.featuredMods}</td>
+                <td ${textStyle}>${rank}</td>
+                <td ${textStyle}><a href="${developer.link}" ${textStyle}>${developer.name}</a></td>
+                <td ${textStyle}>${developer.points}</td>
+                <td ${textStyle}>${developer.totalMods}</td>
+                <td ${textStyle}>${developer.unfeaturedMods}</td>
+                <td ${textStyle}>${developer.featuredMods}</td>
             `;
             document.getElementById("leaderboard").appendChild(row);
         }

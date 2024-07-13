@@ -21,28 +21,3 @@ th, td {
 thead tr {
     background-color: #303030;
 }
-
-tbody tr:nth-child(1) {
-    background-color: gold;
-    td {
-        color: black;
-    }
-}
-
-tbody tr:nth-child(2) {
-    background-color: silver;
-    td {
-        color: black;
-    }
-}
-
-tbody tr:nth-child(3) {
-    background-color: sienna;
-    td {
-        color: black;
-    }
-}
-
-tbody tr:nth-child(3 + n) {
-    background-color: #383838;
-}
