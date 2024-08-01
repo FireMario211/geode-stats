@@ -33,6 +33,7 @@
     </nav>
 
     <h1 class="centered">Operating System Support</h1>
+    <p class="centered" id="total">Total Mods:</p>
     <div class="centered" id="operating-systems">
         <div>
             <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
@@ -72,6 +73,7 @@
         const alphabetical = params.has("alphabetical") && params.get("alphabetical") == "1";
         if (alphabetical) mods.sort((a, b) => a.name.localeCompare(b.name));
 
+        document.getElementById("total").innerHTML = `Total Mods: ${mods.length}`;
         if (!params.has("list")) {
             for (const mod of mods) {
                 if (mod.gd.win) osSupport.windows++;

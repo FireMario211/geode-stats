@@ -32,10 +32,9 @@
     </nav>
 
     <h1 class="centered">Geode Statistics</h1>
-    <p class="centered">
+    <p class="centered" id="description">
         Geode is a Geometry Dash mod loader that allows you to load mods into the game.<br>
         This page will show you some statistics about Geode, its mods, and the developers of said mods.<br>
-        This page uses Geode version 3.4.0 and Geometry Dash version 2.206.
     </p>
     <!-- <footer class="centered">
         <p>
@@ -43,5 +42,9 @@
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
+    <script src="../scripts/index.js"></script>
+    <script>
+        document.getElementById("description").innerHTML += `This page uses Geode version ${GEODE_VERSION} and Geometry Dash version ${GD_VERSION}.`;
+    </script>
 </body>
 </html>

@@ -113,7 +113,7 @@
                 }
                 const textStyle = `style="color: ${rank > 3 ? "white" : "black"};"`;
                 row.innerHTML = `
-                    <td ${textStyle}>${rank}</td>
+                    <td ${textStyle}>${rank} (${index})</td>
                     <td ${textStyle}><a href="${developer.link}" ${textStyle}>${developer.name}</a></td>
                     <td ${textStyle}>${developer.points}</td>
                     <td ${textStyle}>${developer.totalMods}</td>

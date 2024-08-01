@@ -35,55 +35,73 @@
     <h1 class="centered">Operating System Percentage</h1>
     <div id="operating-systems">
         <div class="os-bars">
-            <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
+            <div class="os-label">
+                <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
+            </div>
             <div id="windows-bar-completed" class="os-bar-completed"></div>
             <div id="windows-bar-remaining" class="os-bar-remaining"></div>
             <p id="windows-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <img src="../images/android.svg" class="os-icon" alt="Android Logo">
+            <div class="os-label">
+                <img src="../images/android.svg" class="os-icon" alt="Android Logo">
+            </div>
             <div id="android-bar-completed" class="os-bar-completed"></div>
             <div id="android-bar-remaining" class="os-bar-remaining"></div>
             <p id="android-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <p id="android-32-label" class="android-label">32</p>
+            <div class="os-label">
+                <p id="android-32-label" class="android-label">32</p>
+            </div>
             <div id="android-32-bar-completed" class="os-bar-completed"></div>
             <div id="android-32-bar-remaining" class="os-bar-remaining"></div>
             <p id="android-32-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <p id="android-64-label" class="android-label">64</p>
+            <div class="os-label">
+                <p id="android-64-label" class="android-label">64</p>
+            </div>
             <div id="android-64-bar-completed" class="os-bar-completed"></div>
             <div id="android-64-bar-remaining" class="os-bar-remaining"></div>
             <p id="android-64-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <p id="android-32-64-label" class="android-label">Both</p>
+            <div class="os-label">
+                <p id="android-32-64-label" class="android-label">Both</p>
+            </div>
             <div id="android-32-64-bar-completed" class="os-bar-completed"></div>
             <div id="android-32-64-bar-remaining" class="os-bar-remaining"></div>
             <p id="android-32-64-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <img src="../images/apple.svg" class="os-icon" alt="Apple Logo">
+            <div class="os-label">
+                <img src="../images/apple.svg" class="os-icon" alt="Apple Logo">
+            </div>
             <div id="macos-bar-completed" class="os-bar-completed"></div>
             <div id="macos-bar-remaining" class="os-bar-remaining"></div>
             <p id="macos-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <p id="macos-intel-label" class="macos-label">Intel</p>
+            <div class="os-label">
+                <p id="macos-intel-label" class="macos-label">Intel</p>
+            </div>
             <div id="macos-intel-bar-completed" class="os-bar-completed"></div>
             <div id="macos-intel-bar-remaining" class="os-bar-remaining"></div>
             <p id="macos-intel-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <p id="macos-arm-label" class="macos-label">ARM</p>
+            <div class="os-label">
+                <p id="macos-arm-label" class="macos-label">ARM</p>
+            </div>
             <div id="macos-arm-bar-completed" class="os-bar-completed"></div>
             <div id="macos-arm-bar-remaining" class="os-bar-remaining"></div>
             <p id="macos-arm-percentage" class="os-percentage"></p>
         </div>
         <div class="os-bars">
-            <p id="macos-intel-arm-label" class="macos-label">Both</p>
+            <div class="os-label">
+                <p id="macos-intel-arm-label" class="macos-label">Both</p>
+            </div>
             <div id="macos-intel-arm-bar-completed" class="os-bar-completed"></div>
             <div id="macos-intel-arm-bar-remaining" class="os-bar-remaining"></div>
             <p id="macos-intel-arm-percentage" class="os-percentage"></p>
@@ -135,33 +153,21 @@
             macOSIntelAndARM: osSums.macOSIntelAndARM / mods.length * 100
         }
 
-        document.getElementById("windows-bar-completed").style.width = osPercentages.windows * 0.7 + "%";
-        document.getElementById("windows-bar-remaining").style.width = 70 - osPercentages.windows * 0.7 + "%";
-        document.getElementById("windows-percentage").innerHTML = `${osPercentages.windows.toFixed(2)}%`;
-        document.getElementById("android-bar-completed").style.width = osPercentages.android * 0.7 + "%";
-        document.getElementById("android-bar-remaining").style.width = 70 - osPercentages.android * 0.7 + "%";
-        document.getElementById("android-percentage").innerHTML = `${osPercentages.android.toFixed(2)}%`;
-        document.getElementById("android-32-bar-completed").style.width = osPercentages.android32 * 0.7 + "%";
-        document.getElementById("android-32-bar-remaining").style.width = 70 - osPercentages.android32 * 0.7 + "%";
-        document.getElementById("android-32-percentage").innerHTML = `${osPercentages.android32.toFixed(2)}%`;
-        document.getElementById("android-64-bar-completed").style.width = osPercentages.android64 * 0.7 + "%";
-        document.getElementById("android-64-bar-remaining").style.width = 70 - osPercentages.android64 * 0.7 + "%";
-        document.getElementById("android-64-percentage").innerHTML = `${osPercentages.android64.toFixed(2)}%`;
-        document.getElementById("android-32-64-bar-completed").style.width = osPercentages.android32and64 * 0.7 + "%";
-        document.getElementById("android-32-64-bar-remaining").style.width = 70 - osPercentages.android32and64 * 0.7 + "%";
-        document.getElementById("android-32-64-percentage").innerHTML = `${osPercentages.android32and64.toFixed(2)}%`;
-        document.getElementById("macos-bar-completed").style.width = osPercentages.macOS * 0.7 + "%";
-        document.getElementById("macos-bar-remaining").style.width = 70 - osPercentages.macOS * 0.7 + "%";
-        document.getElementById("macos-percentage").innerHTML = `${osPercentages.macOS.toFixed(2)}%`;
-        document.getElementById("macos-intel-bar-completed").style.width = osPercentages.macOSIntel * 0.7 + "%";
-        document.getElementById("macos-intel-bar-remaining").style.width = 70 - osPercentages.macOSIntel * 0.7 + "%";
-        document.getElementById("macos-intel-percentage").innerHTML = `${osPercentages.macOSIntel.toFixed(2)}%`;
-        document.getElementById("macos-arm-bar-completed").style.width = osPercentages.macOSARM * 0.7 + "%";
-        document.getElementById("macos-arm-bar-remaining").style.width = 70 - osPercentages.macOSARM * 0.7 + "%";
-        document.getElementById("macos-arm-percentage").innerHTML = `${osPercentages.macOSARM.toFixed(2)}%`;
-        document.getElementById("macos-intel-arm-bar-completed").style.width = osPercentages.macOSIntelAndARM * 0.7 + "%";
-        document.getElementById("macos-intel-arm-bar-remaining").style.width = 70 - osPercentages.macOSIntelAndARM * 0.7 + "%";
-        document.getElementById("macos-intel-arm-percentage").innerHTML = `${osPercentages.macOSIntelAndARM.toFixed(2)}%`;
+        function setPercentage(percentage, label) {
+            document.getElementById(label + "-bar-completed").style.width = percentage * 0.7 + "%"
+            document.getElementById(label + "-bar-remaining").style.width = 70 - percentage * 0.7 + "%"
+            document.getElementById(label + "-percentage").innerHTML = `${percentage.toFixed(2)}%`;
+        }
+
+        setPercentage(osPercentages.windows, "windows");
+        setPercentage(osPercentages.android, "android");
+        setPercentage(osPercentages.android32, "android-32");
+        setPercentage(osPercentages.android64, "android-64");
+        setPercentage(osPercentages.android32and64, "android-32-64");
+        setPercentage(osPercentages.macOS, "macos");
+        setPercentage(osPercentages.macOSIntel, "macos-intel");
+        setPercentage(osPercentages.macOSARM, "macos-arm");
+        setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
     </script>
 </body>
 </html>

@@ -10,18 +10,6 @@
     font-size: 80px;
 }
 
-#android-32-label {
-    margin-left: 75px;
-}
-
-#android-64-label {
-    margin-left: 75px;
-}
-
-#android-32-64-label {
-    margin-left: 30px;
-}
-
 .macos-label {
     color: black;
     font-family: "Quicksand", sans-serif;
@@ -31,22 +19,10 @@
 
 .os-percentage {
     color: white;
-    margin-left: 30px;
+    margin-left: 10px;
     font-family: "Quicksand", sans-serif;
     font-weight: 600;
     font-size: 80px;
-}
-
-#macos-intel-label {
-    margin-left: 42px;
-}
-
-#macos-arm-label {
-    margin-left: 38px;
-}
-
-#macos-intel-arm-label {
-    margin-left: 34px;
 }
 
 a {
@@ -76,47 +52,56 @@ a {
     width: 35%;
 }
 
+.os-label {
+    display: block;
+    margin-left: 20px;
+    margin-right: 20px;
+    min-width: 180px;
+    max-width: 180px;
+}
+
+.os-label img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.os-label p {
+    text-align: center;
+}
+
 #windows-bar-completed {
     background-color: #0078d6;
-    margin-left: 100px;
 }
 
 #android-bar-completed {
     background-color: #3ddc84;
-    margin-left: 100px;
 }
 
 #android-32-bar-completed {
     background-color: #3ddc84;
-    margin-left: 109px;
 }
 
 #android-64-bar-completed {
     background-color: #3ddc84;
-    margin-left: 109px;
 }
 
 #android-32-64-bar-completed {
     background-color: #3ddc84;
-    margin-left: 67px;
 }
 
 #macos-bar-completed {
     background-color: #000000;
-    margin-left: 100px;
 }
 
 #macos-intel-bar-completed {
     background-color: #000000;
-    margin-left: 71px;
 }
 
 #macos-arm-bar-completed {
     background-color: #000000;
-    margin-left: 60px;
 }
 
 #macos-intel-arm-bar-completed {
     background-color: #000000;
-    margin-left: 63px;
 }
