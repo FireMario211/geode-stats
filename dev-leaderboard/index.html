@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="../images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Quicksand">
-    <link href="https://cdn.jsdelivr.net/npm/tablesorter@2.32.0/dist/css/theme.bootstrap_4.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/index.css">
     <link rel="stylesheet" href="./index.css">
     <meta property="og:title" content="Developer Leaderboard - Geode Statistics" />
@@ -87,6 +86,10 @@
 
         developerPoints.sort((a, b) => b.totalDownloads - a.totalDownloads);
 
+        function formatNum(num) {
+            return Intl.NumberFormat().format(num);
+        }
+
         let rank = 0;
         $("#leaderboard").html("");
         for (const developer of developerPoints) {
@@ -110,21 +113,16 @@
             row.html(`
                 <td ${textStyle}>${rank}</td>
                 <td ${textStyle}><a href="${developer.link}" ${textStyle}>${developer.name}</a></td>
-                <td ${textStyle}>${developer.totalDownloads}</td>
-                <td ${textStyle}>${developer.points}</td>
-                <td ${textStyle}>${developer.totalMods}</td>
-                <td ${textStyle}>${developer.unfeaturedMods}</td>
-                <td ${textStyle}>${developer.featuredMods}</td>
+                <td ${textStyle}>${formatNum(developer.totalDownloads)}</td>
+                <td ${textStyle}>${formatNum(developer.points)}</td>
+                <td ${textStyle}>${formatNum(developer.totalMods)}</td>
+                <td ${textStyle}>${formatNum(developer.unfeaturedMods)}</td>
+                <td ${textStyle}>${formatNum(developer.featuredMods)}</td>
             `);
             $("#leaderboard").append(row);
         }
 
-        $("#leaderboard-table").tablesorter({
-            theme: "bootstrap_4",
-            widgets: ["zebra"]
-        });
-
-        loadMods();
+        $("#leaderboard-table").tablesorter();
     </script>
 </body>
 </html>
