@@ -56,6 +56,7 @@
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../scripts/index.js"></script>
     <script type="module">
         const mods = await getMods();
@@ -84,47 +85,48 @@
                 else found.unfeaturedMods++;
             }
 
-            developerPoints.sort((a, b) => document.getElementById("developer-points").checked ? b.points - a.points : b.totalMods - a.totalMods);
+            const isChecked = $("#developer-points").is(":checked");
+            developerPoints.sort((a, b) => isChecked ? b.points - a.points : b.totalMods - a.totalMods);
 
             let index = 0;
             let rank = 0;
-            document.getElementById("leaderboard").innerHTML = "";
+            $("#leaderboard").html("");
             for (const developer of developerPoints) {
                 index++;
                 if (index == 1 || (
-                    document.getElementById("developer-points").checked ?
+                    isChecked ?
                         developerPoints[index - 1].points < developerPoints[index - 2].points :
                         developerPoints[index - 1].totalMods < developerPoints[index - 2].totalMods
                 )) rank = index;
-                const row = document.createElement("tr");
+                const row = $("<tr></tr>");
                 switch (rank) {
                     case 1:
-                        row.style.backgroundColor = "gold";
+                        row.css("background-color", "gold");
                         break;
                     case 2:
-                        row.style.backgroundColor = "silver";
+                        row.css("background-color", "silver");
                         break;
                     case 3:
-                        row.style.backgroundColor = "sienna";
+                        row.css("background-color", "sienna");
                         break;
                     default:
-                        row.style.backgroundColor = "#383838";
+                        row.css("background-color", "#383838");
                         break;
                 }
                 const textStyle = `style="color: ${rank > 3 ? "white" : "black"};"`;
-                row.innerHTML = `
+                row.html(`
                     <td ${textStyle}>${rank} (${index})</td>
                     <td ${textStyle}><a href="${developer.link}" ${textStyle}>${developer.name}</a></td>
                     <td ${textStyle}>${developer.points}</td>
                     <td ${textStyle}>${developer.totalMods}</td>
                     <td ${textStyle}>${developer.unfeaturedMods}</td>
                     <td ${textStyle}>${developer.featuredMods}</td>
-                `;
-                document.getElementById("leaderboard").appendChild(row);
+                `);
+                $("#leaderboard").append(row);
             }
         }
 
-        document.getElementById("developer-points").addEventListener("change", loadMods);
+        $("#developer-points").on("change", loadMods);
 
         loadMods();
     </script>

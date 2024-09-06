@@ -71,14 +71,10 @@
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../scripts/index.js"></script>
     <script type="module">
         const mods = await getMods();
-
-        function createLabelWithDropdownStats(label, amount, id) {
-            return `${label}: ${amount} <button id="${id}-button" onclick="document.getElementById('${id}-dropdown').classList.toggle('hidden')">\u25BC</button>
-            <div id="${id}-dropdown" class="hidden"></div>`;
-        }
 
         const osSupport = {
             windows: [],
@@ -99,7 +95,7 @@
             macOSOnlyARM: []
         };
 
-        document.getElementById("total").innerHTML = `Total Mods: ${mods.length}`;
+        $("#total").html(`Total Mods: ${mods.length}`);
         for (const mod of mods) {
             if (mod.gd.win) osSupport.windows.push(mod);
             if (mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.onlyWindows.push(mod);
@@ -119,51 +115,57 @@
             if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) osSupport.macOSOnlyARM.push(mod);
         }
 
-        document.getElementById("windows-stats").innerHTML = createLabelWithDropdownStats("Windows", osSupport.windows.length, "windows");
-        document.getElementById("windows-only-stats").innerHTML = createLabelWithDropdownStats("Windows-only", osSupport.onlyWindows.length, "windows-only");
+        function createLabelWithDropdownStats(label, amount, id) {
+            $(`#${id}-stats`).html(
+                `${label}: ${amount} <button id="${id}-button" onclick="$('#${id}-dropdown').toggleClass('hidden')">\u25BC</button>
+                <div id="${id}-dropdown" class="hidden"></div>`);
+        }
 
-        document.getElementById("android-stats").innerHTML = createLabelWithDropdownStats("Android", osSupport.android.length, "android");
-        document.getElementById("android-32-stats").innerHTML = createLabelWithDropdownStats("32-bit", osSupport.android32.length, "android-32");
-        document.getElementById("android-64-stats").innerHTML = createLabelWithDropdownStats("64-bit", osSupport.android64.length, "android-64");
-        document.getElementById("android-32-64-stats").innerHTML = createLabelWithDropdownStats("32-bit and 64-bit", osSupport.android32and64.length, "android-32-64");
-        document.getElementById("android-only-stats").innerHTML = createLabelWithDropdownStats("Android-only", osSupport.onlyAndroid.length, "android-only");
-        document.getElementById("android-only-32-stats").innerHTML = createLabelWithDropdownStats("Only 32-bit", osSupport.androidOnly32.length, "android-only-32");
-        document.getElementById("android-only-64-stats").innerHTML = createLabelWithDropdownStats("Only 64-bit", osSupport.androidOnly64.length, "android-only-64");
+        createLabelWithDropdownStats("Windows", osSupport.windows.length, "windows");
+        createLabelWithDropdownStats("Windows-only", osSupport.onlyWindows.length, "windows-only");
 
-        document.getElementById("macos-stats").innerHTML = createLabelWithDropdownStats("macOS", osSupport.macOS.length, "macos");
-        document.getElementById("macos-intel-stats").innerHTML = createLabelWithDropdownStats("Intel", osSupport.macOSIntel.length, "macos-intel");
-        document.getElementById("macos-arm-stats").innerHTML = createLabelWithDropdownStats("ARM", osSupport.macOSARM.length, "macos-arm");
-        document.getElementById("macos-intel-arm-stats").innerHTML = createLabelWithDropdownStats("Intel and ARM", osSupport.macOSIntelAndARM.length, "macos-intel-arm");
-        document.getElementById("macos-only-stats").innerHTML = createLabelWithDropdownStats("macOS-only", osSupport.onlyMacOS.length, "macos-only");
-        document.getElementById("macos-only-intel-stats").innerHTML = createLabelWithDropdownStats("Only Intel", osSupport.macOSOnlyIntel.length, "macos-only-intel");
-        document.getElementById("macos-only-arm-stats").innerHTML = createLabelWithDropdownStats("Only ARM", osSupport.macOSOnlyARM.length, "macos-only-arm");
+        createLabelWithDropdownStats("Android", osSupport.android.length, "android");
+        createLabelWithDropdownStats("32-bit", osSupport.android32.length, "android-32");
+        createLabelWithDropdownStats("64-bit", osSupport.android64.length, "android-64");
+        createLabelWithDropdownStats("32-bit and 64-bit", osSupport.android32and64.length, "android-32-64");
+        createLabelWithDropdownStats("Android-only", osSupport.onlyAndroid.length, "android-only");
+        createLabelWithDropdownStats("Only 32-bit", osSupport.androidOnly32.length, "android-only-32");
+        createLabelWithDropdownStats("Only 64-bit", osSupport.androidOnly64.length, "android-only-64");
+
+        createLabelWithDropdownStats("macOS", osSupport.macOS.length, "macos");
+        createLabelWithDropdownStats("Intel", osSupport.macOSIntel.length, "macos-intel");
+        createLabelWithDropdownStats("ARM", osSupport.macOSARM.length, "macos-arm");
+        createLabelWithDropdownStats("Intel and ARM", osSupport.macOSIntelAndARM.length, "macos-intel-arm");
+        createLabelWithDropdownStats("macOS-only", osSupport.onlyMacOS.length, "macos-only");
+        createLabelWithDropdownStats("Only Intel", osSupport.macOSOnlyIntel.length, "macos-only-intel");
+        createLabelWithDropdownStats("Only ARM", osSupport.macOSOnlyARM.length, "macos-only-arm");
 
         function updateSupport() {
             for (const os in osSupport) {
-                osSupport[os].sort((a, b) => document.getElementById("alphabetical").checked ? a.name.localeCompare(b.name) : b.downloads - a.downloads);
+                osSupport[os].sort((a, b) => $("#alphabetical").is(":checked") ? a.name.localeCompare(b.name) : b.downloads - a.downloads);
             }
 
-            document.getElementById("windows-dropdown").innerHTML = osSupport.windows.map(modToName).join("<br>");
-            document.getElementById("windows-only-dropdown").innerHTML = osSupport.onlyWindows.map(modToName).join("<br>");
+            $("#windows-dropdown").html(osSupport.windows.map(modToName).join("<br>"));
+            $("#windows-only-dropdown").html(osSupport.onlyWindows.map(modToName).join("<br>"));
 
-            document.getElementById("android-dropdown").innerHTML = osSupport.android.map(modToName).join("<br>");
-            document.getElementById("android-32-dropdown").innerHTML = osSupport.android32.map(modToName).join("<br>");
-            document.getElementById("android-64-dropdown").innerHTML = osSupport.android64.map(modToName).join("<br>");
-            document.getElementById("android-32-64-dropdown").innerHTML = osSupport.android32and64.map(modToName).join("<br>");
-            document.getElementById("android-only-dropdown").innerHTML = osSupport.onlyAndroid.map(modToName).join("<br>");
-            document.getElementById("android-only-32-dropdown").innerHTML = osSupport.androidOnly32.map(modToName).join("<br>");
-            document.getElementById("android-only-64-dropdown").innerHTML = osSupport.androidOnly64.map(modToName).join("<br>");
+            $("#android-dropdown").html(osSupport.android.map(modToName).join("<br>"));
+            $("#android-32-dropdown").html(osSupport.android32.map(modToName).join("<br>"));
+            $("#android-64-dropdown").html(osSupport.android64.map(modToName).join("<br>"));
+            $("#android-32-64-dropdown").html(osSupport.android32and64.map(modToName).join("<br>"));
+            $("#android-only-dropdown").html(osSupport.onlyAndroid.map(modToName).join("<br>"));
+            $("#android-only-32-dropdown").html(osSupport.androidOnly32.map(modToName).join("<br>"));
+            $("#android-only-64-dropdown").html(osSupport.androidOnly64.map(modToName).join("<br>"));
 
-            document.getElementById("macos-dropdown").innerHTML = osSupport.macOS.map(modToName).join("<br>");
-            document.getElementById("macos-intel-dropdown").innerHTML = osSupport.macOSIntel.map(modToName).join("<br>");
-            document.getElementById("macos-arm-dropdown").innerHTML = osSupport.macOSARM.map(modToName).join("<br>");
-            document.getElementById("macos-intel-arm-dropdown").innerHTML = osSupport.macOSIntelAndARM.map(modToName).join("<br>");
-            document.getElementById("macos-only-dropdown").innerHTML = osSupport.onlyMacOS.map(modToName).join("<br>");
-            document.getElementById("macos-only-intel-dropdown").innerHTML = osSupport.macOSOnlyIntel.map(modToName).join("<br>");
-            document.getElementById("macos-only-arm-dropdown").innerHTML = osSupport.macOSOnlyARM.map(modToName).join("<br>");
+            $("#macos-dropdown").html(osSupport.macOS.map(modToName).join("<br>"));
+            $("#macos-intel-dropdown").html(osSupport.macOSIntel.map(modToName).join("<br>"));
+            $("#macos-arm-dropdown").html(osSupport.macOSARM.map(modToName).join("<br>"));
+            $("#macos-intel-arm-dropdown").html(osSupport.macOSIntelAndARM.map(modToName).join("<br>"));
+            $("#macos-only-dropdown").html(osSupport.onlyMacOS.map(modToName).join("<br>"));
+            $("#macos-only-intel-dropdown").html(osSupport.macOSOnlyIntel.map(modToName).join("<br>"));
+            $("#macos-only-arm-dropdown").html(osSupport.macOSOnlyARM.map(modToName).join("<br>"));
         }
 
-        document.getElementById("alphabetical").addEventListener("change", updateSupport);
+        $("#alphabetical").on("change", updateSupport);
 
         updateSupport();
     </script>
