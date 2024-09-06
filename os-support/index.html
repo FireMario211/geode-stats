@@ -57,15 +57,15 @@
     <script src="../scripts/index.js"></script>
     <script type="module">
         const osSupport = {
-            windows: 0,
-            android: 0,
-            android32: 0,
-            android64: 0,
-            android32and64: 0,
-            macOS: 0,
-            macOSIntel: 0,
-            macOSARM: 0,
-            macOSIntelAndARM: 0
+            windows: [],
+            android: [],
+            android32: [],
+            android64: [],
+            android32and64: [],
+            macOS: [],
+            macOSIntel: [],
+            macOSARM: [],
+            macOSIntelAndARM: []
         };
 
         const mods = await getMods();
@@ -76,15 +76,15 @@
         document.getElementById("total").innerHTML = `Total Mods: ${mods.length}`;
         if (!params.has("list")) {
             for (const mod of mods) {
-                if (mod.gd.win) osSupport.windows++;
-                if (mod.gd.android32) osSupport.android32++;
-                if (mod.gd.android64) osSupport.android64++;
-                if (mod.gd.android32 || mod.gd.android64) osSupport.android++;
-                if (mod.gd.android32 && mod.gd.android64) osSupport.android32and64++;
-                if (mod.gd["mac-intel"]) osSupport.macOSIntel++;
-                if (mod.gd["mac-arm"]) osSupport.macOSARM++;
-                if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSupport.macOS++;
-                if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSupport.macOSIntelAndARM++;
+                if (mod.gd.win) osSupport.windows.push(mods);
+                if (mod.gd.android32) osSupport.android32.push(mods);
+                if (mod.gd.android64) osSupport.android64.push(mods);
+                if (mod.gd.android32 || mod.gd.android64) osSupport.android.push(mods);
+                if (mod.gd.android32 && mod.gd.android64) osSupport.android32and64.push(mods);
+                if (mod.gd["mac-intel"]) osSupport.macOSIntel.push(mods);
+                if (mod.gd["mac-arm"]) osSupport.macOSARM.push(mods);
+                if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSupport.macOS.push(mods);
+                if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSupport.macOSIntelAndARM.push(mods);
             }
 
             const onlySupport = {
@@ -107,22 +107,22 @@
                 if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) onlySupport.macOSOnlyARM.push(mod);
             }
 
-            document.getElementById("windows-stats").innerHTML = `Windows: ${osSupport.windows}<br>
-            Windows-only:${onlySupport.onlyWindows.length > 0 ? `<br>${onlySupport.onlyWindows.map(modToName).join("<br>")}` : ""}`;
-            document.getElementById("android-stats").innerHTML = `Android: ${osSupport.android}<br>
-            32-bit: ${osSupport.android32}<br>
-            64-bit: ${osSupport.android64}<br>
-            32-bit and 64-bit: ${osSupport.android32and64}<br>
-            Android-only:${onlySupport.onlyAndroid.length > 0 ? `<br>${onlySupport.onlyAndroid.map(modToName).join("<br>")}` : ""}<br>
-            Only 32-bit:${onlySupport.androidOnly32.length > 0 ? `<br>${onlySupport.androidOnly32.map(modToName).join("<br>")}` : ""}<br>
-            Only 64-bit:${onlySupport.androidOnly64.length > 0 ? `<br>${onlySupport.androidOnly64.map(modToName).join("<br>")}` : ""}`;
-            document.getElementById("macos-stats").innerHTML = `macOS: ${osSupport.macOS}<br>
-            Intel: ${osSupport.macOSIntel}<br>
-            ARM: ${osSupport.macOSARM}<br>
-            Intel and ARM: ${osSupport.macOSIntelAndARM}<br>
-            macOS-only:${onlySupport.onlyMacOS.length > 0 ? `<br>${onlySupport.onlyMacOS.map(modToName).join("<br>")}` : ""}<br>
-            Only Intel:${onlySupport.macOSOnlyIntel.length > 0 ? `<br>${onlySupport.macOSOnlyIntel.map(modToName).join("<br>")}` : ""}<br>
-            Only ARM:${onlySupport.macOSOnlyARM.length > 0 ? `<br>${onlySupport.macOSOnlyARM.map(modToName).join("<br>")}` : ""}`;
+            document.getElementById("windows-stats").innerHTML = `Windows: ${osSupport.windows.length}<br>
+            Windows-only: ${onlySupport.onlyWindows.length}${onlySupport.onlyWindows.length > 0 ? `<br>${onlySupport.onlyWindows.map(modToName).join("<br>")}` : ""}`;
+            document.getElementById("android-stats").innerHTML = `Android: ${osSupport.android.length}<br>
+            32-bit: ${osSupport.android32.length}<br>
+            64-bit: ${osSupport.android64.length}<br>
+            32-bit and 64-bit: ${osSupport.android32and64.length}<br>
+            Android-only: ${onlySupport.onlyAndroid.length}${onlySupport.onlyAndroid.length > 0 ? `<br>${onlySupport.onlyAndroid.map(modToName).join("<br>")}` : ""}<br>
+            Only 32-bit: ${onlySupport.androidOnly32.length}${onlySupport.androidOnly32.length > 0 ? `<br>${onlySupport.androidOnly32.map(modToName).join("<br>")}` : ""}<br>
+            Only 64-bit: ${onlySupport.androidOnly64.length}${onlySupport.androidOnly64.length > 0 ? `<br>${onlySupport.androidOnly64.map(modToName).join("<br>")}` : ""}`;
+            document.getElementById("macos-stats").innerHTML = `macOS: ${osSupport.macOS.length}<br>
+            Intel: ${osSupport.macOSIntel.length}<br>
+            ARM: ${osSupport.macOSARM.length}<br>
+            Intel and ARM: ${osSupport.macOSIntelAndARM.length}<br>
+            macOS-only: ${onlySupport.onlyMacOS.length}${onlySupport.onlyMacOS.length > 0 ? `<br>${onlySupport.onlyMacOS.map(modToName).join("<br>")}` : ""}<br>
+            Only Intel: ${onlySupport.macOSOnlyIntel.length}${onlySupport.macOSOnlyIntel.length > 0 ? `<br>${onlySupport.macOSOnlyIntel.map(modToName).join("<br>")}` : ""}<br>
+            Only ARM: ${onlySupport.macOSOnlyARM.length}${onlySupport.macOSOnlyARM.length > 0 ? `<br>${onlySupport.macOSOnlyARM.map(modToName).join("<br>")}` : ""}`;
         } else {
             const listType = params.get("list");
             const operatingSystems = document.getElementById("operating-systems");
