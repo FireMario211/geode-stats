@@ -110,7 +110,7 @@
             if (mod.gd["mac-arm"]) osSupport.macOSARM.push(mod);
             if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSupport.macOS.push(mod);
             if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSupport.macOSIntelAndARM.push(mod);
-            if (!mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.onlyMacOS.push(mod);
+            if (!mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && (mod.gd["mac-intel"] || mod.gd["mac-arm"])) osSupport.onlyMacOS.push(mod);
             if (mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.macOSOnlyIntel.push(mod);
             if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) osSupport.macOSOnlyARM.push(mod);
         }
