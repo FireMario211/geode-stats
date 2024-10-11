@@ -2,7 +2,7 @@ const GD_VERSION = "2.206";
 const GEODE_VERSION = "3.8.1";
 
 function modToName(mod) {
-    return `<a href="https://geode-sdk.org/mods/${mod.id}">${mod.name} by ${mod.developer.display_name}</a>`;
+    return `<a href="https://geode-sdk.org/mods/${mod.id}">${mod.name} by ${mod.developers.find(x => x.is_owner).display_name}</a>`;
 }
 
 function convertGD(gd) {
@@ -20,7 +20,7 @@ function responseToMod(response) {
         id: response.id,
         name: response.versions[0].name,
         description: response.versions[0].description,
-        developer: response.developers.filter(x => x.is_owner)[0],
+        developers: response.developers,
         gd: convertGD(response.versions[0].gd),
         downloads: response.download_count,
         latestDownloads: response.versions[0].download_count,
