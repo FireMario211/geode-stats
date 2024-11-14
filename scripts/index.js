@@ -1,5 +1,5 @@
 const GD_VERSION = "2.206";
-const GEODE_VERSION = "3.8.1";
+const GEODE_VERSION = "3.9.1";
 
 function modToName(mod) {
     return `<a href="https://geode-sdk.org/mods/${mod.id}">${mod.name} by ${mod.developers.find(x => x.is_owner).display_name}</a>`;
