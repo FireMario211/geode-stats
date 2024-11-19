@@ -128,7 +128,8 @@
             macOSIntelAndARM: 0
         }
 
-        const mods = await getMods();
+        const urlParams = new URLSearchParams(window.location.search);
+        const mods = await getMods(urlParams.get("gd"), urlParams.get("geode"));
 
         for (const mod of mods) {
             if (mod.gd.win) osSums.windows++;
