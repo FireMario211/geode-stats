@@ -43,6 +43,7 @@
             <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
             <p class="os-stats" id="windows-stats"></p>
             <p class="os-stats" id="windows-only-stats"></p>
+            <p class="os-stats" id="not-windows-stats"></p>
         </div>
         <div>
             <img src="../images/android.svg" class="os-icon" alt="Android Logo">
@@ -51,6 +52,7 @@
             <p class="os-stats" id="android-64-stats"></p>
             <p class="os-stats" id="android-32-64-stats"></p>
             <p class="os-stats" id="android-only-stats"></p>
+            <p class="os-stats" id="not-android-stats"></p>
             <p class="os-stats" id="android-only-32-stats"></p>
             <p class="os-stats" id="android-only-64-stats"></p>
         </div>
@@ -61,6 +63,7 @@
             <p class="os-stats" id="macos-arm-stats"></p>
             <p class="os-stats" id="macos-intel-arm-stats"></p>
             <p class="os-stats" id="macos-only-stats"></p>
+            <p class="os-stats" id="not-macos-stats"></p>
             <p class="os-stats" id="macos-only-intel-stats"></p>
             <p class="os-stats" id="macos-only-arm-stats"></p>
         </div>
@@ -80,11 +83,13 @@
         const osSupport = {
             windows: [],
             onlyWindows: [],
+            notWindows: [],
             android: [],
             android32: [],
             android64: [],
             android32and64: [],
             onlyAndroid: [],
+            notAndroid: [],
             androidOnly32: [],
             androidOnly64: [],
             macOS: [],
@@ -92,6 +97,7 @@
             macOSARM: [],
             macOSIntelAndARM: [],
             onlyMacOS: [],
+            notMacOS: [],
             macOSOnlyIntel: [],
             macOSOnlyARM: []
         };
@@ -100,11 +106,13 @@
         for (const mod of mods) {
             if (mod.gd.win) osSupport.windows.push(mod);
             if (mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.onlyWindows.push(mod);
+            if (!mod.gd.win) osSupport.notWindows.push(mod);
             if (mod.gd.android32) osSupport.android32.push(mod);
             if (mod.gd.android64) osSupport.android64.push(mod);
             if (mod.gd.android32 || mod.gd.android64) osSupport.android.push(mod);
             if (mod.gd.android32 && mod.gd.android64) osSupport.android32and64.push(mod);
             if (!mod.gd.win && (mod.gd.android32 || mod.gd.android64) && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.onlyAndroid.push(mod);
+            if (!mod.gd.android32 && !mod.gd.android64) osSupport.notAndroid.push(mod);
             if (mod.gd.android32 && !mod.gd.android64) osSupport.androidOnly32.push(mod);
             if (mod.gd.android64 && !mod.gd.android32) osSupport.androidOnly64.push(mod);
             if (mod.gd["mac-intel"]) osSupport.macOSIntel.push(mod);
@@ -112,6 +120,7 @@
             if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSupport.macOS.push(mod);
             if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSupport.macOSIntelAndARM.push(mod);
             if (!mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && (mod.gd["mac-intel"] || mod.gd["mac-arm"])) osSupport.onlyMacOS.push(mod);
+            if (!mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.notMacOS.push(mod);
             if (mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.macOSOnlyIntel.push(mod);
             if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) osSupport.macOSOnlyARM.push(mod);
         }
@@ -124,12 +133,14 @@
 
         createLabelWithDropdownStats("Windows", osSupport.windows.length, "windows");
         createLabelWithDropdownStats("Windows-only", osSupport.onlyWindows.length, "windows-only");
+        createLabelWithDropdownStats("Not on Windows", osSupport.notWindows.length, "not-windows");
 
         createLabelWithDropdownStats("Android", osSupport.android.length, "android");
         createLabelWithDropdownStats("32-bit", osSupport.android32.length, "android-32");
         createLabelWithDropdownStats("64-bit", osSupport.android64.length, "android-64");
         createLabelWithDropdownStats("32-bit and 64-bit", osSupport.android32and64.length, "android-32-64");
         createLabelWithDropdownStats("Android-only", osSupport.onlyAndroid.length, "android-only");
+        createLabelWithDropdownStats("Not on Android", osSupport.notAndroid.length, "not-android");
         createLabelWithDropdownStats("Only 32-bit", osSupport.androidOnly32.length, "android-only-32");
         createLabelWithDropdownStats("Only 64-bit", osSupport.androidOnly64.length, "android-only-64");
 
@@ -138,6 +149,7 @@
         createLabelWithDropdownStats("ARM", osSupport.macOSARM.length, "macos-arm");
         createLabelWithDropdownStats("Intel and ARM", osSupport.macOSIntelAndARM.length, "macos-intel-arm");
         createLabelWithDropdownStats("macOS-only", osSupport.onlyMacOS.length, "macos-only");
+        createLabelWithDropdownStats("Not on macOS", osSupport.notMacOS.length, "not-macos");
         createLabelWithDropdownStats("Only Intel", osSupport.macOSOnlyIntel.length, "macos-only-intel");
         createLabelWithDropdownStats("Only ARM", osSupport.macOSOnlyARM.length, "macos-only-arm");
 
@@ -148,12 +160,14 @@
 
             $("#windows-dropdown").html(osSupport.windows.map(modToName).join("<br>"));
             $("#windows-only-dropdown").html(osSupport.onlyWindows.map(modToName).join("<br>"));
+            $("#not-windows-dropdown").html(osSupport.notWindows.map(modToName).join("<br>"));
 
             $("#android-dropdown").html(osSupport.android.map(modToName).join("<br>"));
             $("#android-32-dropdown").html(osSupport.android32.map(modToName).join("<br>"));
             $("#android-64-dropdown").html(osSupport.android64.map(modToName).join("<br>"));
             $("#android-32-64-dropdown").html(osSupport.android32and64.map(modToName).join("<br>"));
             $("#android-only-dropdown").html(osSupport.onlyAndroid.map(modToName).join("<br>"));
+            $("#not-android-dropdown").html(osSupport.notAndroid.map(modToName).join("<br>"));
             $("#android-only-32-dropdown").html(osSupport.androidOnly32.map(modToName).join("<br>"));
             $("#android-only-64-dropdown").html(osSupport.androidOnly64.map(modToName).join("<br>"));
 
@@ -162,6 +176,7 @@
             $("#macos-arm-dropdown").html(osSupport.macOSARM.map(modToName).join("<br>"));
             $("#macos-intel-arm-dropdown").html(osSupport.macOSIntelAndARM.map(modToName).join("<br>"));
             $("#macos-only-dropdown").html(osSupport.onlyMacOS.map(modToName).join("<br>"));
+            $("#not-macos-dropdown").html(osSupport.notMacOS.map(modToName).join("<br>"));
             $("#macos-only-intel-dropdown").html(osSupport.macOSOnlyIntel.map(modToName).join("<br>"));
             $("#macos-only-arm-dropdown").html(osSupport.macOSOnlyARM.map(modToName).join("<br>"));
         }
