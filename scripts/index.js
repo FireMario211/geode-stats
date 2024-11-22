@@ -32,12 +32,15 @@ function responseToMod(response, gd) {
 async function getMods(gd, geode) {
     const mods = [];
 
-    const page1 = await fetch(`https://api.geode-sdk.org/v1/mods?gd=${gd || GD_VERSION}&geode=${geode || GEODE_VERSION}&per_page=100`).then(r => r.json());
-    mods.push(...page1.payload.data.map(res => responseToMod(res, gd || GD_VERSION)));
+    let gdVersion = gd != null ? gd : GD_VERSION;
+    let geodeVersion = geode != null ? geode : GEODE_VERSION;
+    const baseURL = `https://api.geode-sdk.org/v1/mods?per_page=100${gdVersion ? `&gd=${gdVersion}` : ""}${geodeVersion ? `&geode=${geodeVersion}` : ""}`;
+    const page1 = await fetch(baseURL).then(r => r.json());
+    mods.push(...page1.payload.data.map(res => responseToMod(res, gdVersion)));
     const maxPage = Math.ceil(page1.payload.count / 100);
     for (let i = 2; i <= maxPage; i++) {
-        const page = await fetch(`https://api.geode-sdk.org/v1/mods?gd=${gd || GD_VERSION}&geode=${geode || GEODE_VERSION}&per_page=100&page=${i}`).then(r => r.json());
-        mods.push(...page.payload.data.map(res => responseToMod(res, gd || GD_VERSION)));
+        const page = await fetch(`${baseURL}&page=${i}`).then(r => r.json());
+        mods.push(...page.payload.data.map(res => responseToMod(res, gdVersion)));
     }
 
     return mods;
