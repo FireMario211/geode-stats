@@ -16,11 +16,9 @@
 </head>
 <body>
     <nav>
-        <img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo">
-        <p id="title">Geode Statistics</p>
+        <a href=".."><img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo"></a>
         <ul>
-            <li><a href="..">Home</a></li>
-            <li><a href="#">Statistics</a>
+            <li><a href="#">Geode Statistics</a>
                 <ul>
                     <li><a href="#">OS Support</a></li>
                     <li><a href="../os-percentage">OS Percentage</a></li>
@@ -28,7 +26,6 @@
                 </ul>
             </li>
         </ul>
-        <img id="author-logo" src="../images/justin-cube.png" alt="Author Logo">
         <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
     </nav>
 
@@ -39,13 +36,13 @@
         <input type="checkbox" id="alphabetical">
     </div>
     <div class="centered" id="operating-systems">
-        <div>
+        <div class="os-div">
             <img src="../images/microsoft-windows.svg" class="os-icon" alt="Windows Logo">
             <p class="os-stats" id="windows-stats"></p>
             <p class="os-stats" id="windows-only-stats"></p>
             <p class="os-stats" id="not-windows-stats"></p>
         </div>
-        <div>
+        <div class="os-div">
             <img src="../images/android.svg" class="os-icon" alt="Android Logo">
             <p class="os-stats" id="android-stats"></p>
             <p class="os-stats" id="android-32-stats"></p>
@@ -56,7 +53,7 @@
             <p class="os-stats" id="android-only-32-stats"></p>
             <p class="os-stats" id="android-only-64-stats"></p>
         </div>
-        <div>
+        <div class="os-div">
             <img src="../images/apple.svg" class="os-icon" alt="Apple Logo">
             <p class="os-stats" id="macos-stats"></p>
             <p class="os-stats" id="macos-intel-stats"></p>
@@ -77,6 +74,34 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
     <script src="../scripts/index.js"></script>
     <script type="module">
+        window.dropdownState = {
+            windows: false,
+            "windows-only": false,
+            "not-windows": false,
+            android: false,
+            "android-32": false,
+            "android-64": false,
+            "android-32-64": false,
+            "android-only": false,
+            "not-android": false,
+            "android-only-32": false,
+            "android-only-64": false,
+            macos: false,
+            "macos-intel": false,
+            "macos-arm": false,
+            "macos-intel-arm": false,
+            "macos-only": false,
+            "not-macos": false,
+            "macos-only-intel": false,
+            "macos-only-arm": false
+        };
+
+        window.onDropdownButton = function (id) {
+            dropdownState[id] = !dropdownState[id];
+            $(`#${id}-dropdown`).toggleClass("hidden", !dropdownState[id]);
+            $(`#${id}-button`).html(dropdownState[id] ? "\u25BC" : "\u25BA");
+        }
+    
         const urlParams = new URLSearchParams(window.location.search);
         const mods = await getMods(urlParams.get("gd"), urlParams.get("geode"));
 
@@ -127,7 +152,7 @@
 
         function createLabelWithDropdownStats(label, amount, id) {
             $(`#${id}-stats`).html(
-                `${label}: ${amount} <button id="${id}-button" onclick="$('#${id}-dropdown').toggleClass('hidden')">\u25BC</button>
+                `${label}: ${amount} <button id="${id}-button" onclick="onDropdownButton('${id}')">\u25BA</button>
                 <div id="${id}-dropdown" class="hidden"></div>`);
         }
 
@@ -158,27 +183,27 @@
                 osSupport[os].sort((a, b) => $("#alphabetical").is(":checked") ? a.name.localeCompare(b.name) : b.downloads - a.downloads);
             }
 
-            $("#windows-dropdown").html(osSupport.windows.map(modToName).join("<br>"));
-            $("#windows-only-dropdown").html(osSupport.onlyWindows.map(modToName).join("<br>"));
-            $("#not-windows-dropdown").html(osSupport.notWindows.map(modToName).join("<br>"));
+            $("#windows-dropdown").html(osSupport.windows.map(x => modToName(x, "win")).join("<br>"));
+            $("#windows-only-dropdown").html(osSupport.onlyWindows.map(x => modToName(x, "win")).join("<br>"));
+            $("#not-windows-dropdown").html(osSupport.notWindows.map(x => modToName(x, "")).join("<br>"));
 
-            $("#android-dropdown").html(osSupport.android.map(modToName).join("<br>"));
-            $("#android-32-dropdown").html(osSupport.android32.map(modToName).join("<br>"));
-            $("#android-64-dropdown").html(osSupport.android64.map(modToName).join("<br>"));
-            $("#android-32-64-dropdown").html(osSupport.android32and64.map(modToName).join("<br>"));
-            $("#android-only-dropdown").html(osSupport.onlyAndroid.map(modToName).join("<br>"));
-            $("#not-android-dropdown").html(osSupport.notAndroid.map(modToName).join("<br>"));
-            $("#android-only-32-dropdown").html(osSupport.androidOnly32.map(modToName).join("<br>"));
-            $("#android-only-64-dropdown").html(osSupport.androidOnly64.map(modToName).join("<br>"));
+            $("#android-dropdown").html(osSupport.android.map(x => modToName(x, x.gd["android64"] ? "android64" : "android32")).join("<br>"));
+            $("#android-32-dropdown").html(osSupport.android32.map(x => modToName(x, "android32")).join("<br>"));
+            $("#android-64-dropdown").html(osSupport.android64.map(x => modToName(x, "android64")).join("<br>"));
+            $("#android-32-64-dropdown").html(osSupport.android32and64.map(x => modToName(x, "android64")).join("<br>"));
+            $("#android-only-dropdown").html(osSupport.onlyAndroid.map(x => modToName(x, x.gd["android64"] ? "android64" : "android32")).join("<br>"));
+            $("#not-android-dropdown").html(osSupport.notAndroid.map(x => modToName(x, "")).join("<br>"));
+            $("#android-only-32-dropdown").html(osSupport.androidOnly32.map(x => modToName(x, "android32")).join("<br>"));
+            $("#android-only-64-dropdown").html(osSupport.androidOnly64.map(x => modToName(x, "android64")).join("<br>"));
 
-            $("#macos-dropdown").html(osSupport.macOS.map(modToName).join("<br>"));
-            $("#macos-intel-dropdown").html(osSupport.macOSIntel.map(modToName).join("<br>"));
-            $("#macos-arm-dropdown").html(osSupport.macOSARM.map(modToName).join("<br>"));
-            $("#macos-intel-arm-dropdown").html(osSupport.macOSIntelAndARM.map(modToName).join("<br>"));
-            $("#macos-only-dropdown").html(osSupport.onlyMacOS.map(modToName).join("<br>"));
-            $("#not-macos-dropdown").html(osSupport.notMacOS.map(modToName).join("<br>"));
-            $("#macos-only-intel-dropdown").html(osSupport.macOSOnlyIntel.map(modToName).join("<br>"));
-            $("#macos-only-arm-dropdown").html(osSupport.macOSOnlyARM.map(modToName).join("<br>"));
+            $("#macos-dropdown").html(osSupport.macOS.map(x => modToName(x, x.gd["mac-arm"] ? "mac-arm" : "mac-intel")).join("<br>"));
+            $("#macos-intel-dropdown").html(osSupport.macOSIntel.map(x => modToName(x, "mac-intel")).join("<br>"));
+            $("#macos-arm-dropdown").html(osSupport.macOSARM.map(x => modToName(x, "mac-arm")).join("<br>"));
+            $("#macos-intel-arm-dropdown").html(osSupport.macOSIntelAndARM.map(x => modToName(x, "mac-arm")).join("<br>"));
+            $("#macos-only-dropdown").html(osSupport.onlyMacOS.map(x => modToName(x, x.gd["mac-arm"] ? "mac-arm" : "mac-intel")).join("<br>"));
+            $("#not-macos-dropdown").html(osSupport.notMacOS.map(x => modToName(x, "")).join("<br>"));
+            $("#macos-only-intel-dropdown").html(osSupport.macOSOnlyIntel.map(x => modToName(x, "mac-intel")).join("<br>"));
+            $("#macos-only-arm-dropdown").html(osSupport.macOSOnlyARM.map(x => modToName(x, "mac-arm")).join("<br>"));
         }
 
         $("#alphabetical").on("change", updateSupport);

@@ -15,11 +15,9 @@
 </head>
 <body>
     <nav>
-        <img id="geode-logo" src="./images/geode-logo.svg" alt="Geode Logo">
-        <p id="title">Geode Statistics</p>
+        <a href="#"><img id="geode-logo" src="./images/geode-logo.svg" alt="Geode Logo"></a>
         <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Statistics</a>
+            <li><a href="#">Geode Statistics</a>
                 <ul>
                     <li><a href="./os-support">OS Support</a></li>
                     <li><a href="./os-percentage">OS Percentage</a></li>
@@ -27,7 +25,6 @@
                 </ul>
             </li>
         </ul>
-        <img id="author-logo" src="./images/justin-cube.png" alt="Author Logo">
         <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
     </nav>
 
@@ -35,6 +32,8 @@
     <p class="centered" id="description">
         Geode is a Geometry Dash mod loader that allows you to load mods into the game.<br>
         This page will show you some statistics about Geode, its mods, and the developers of said mods.<br>
+        Click on the links above to view the statistics.</br>
+        Use the "gd" and "geode" parameters to filter the results by Geometry Dash version and Geode version, respectively.
     </p>
     <!-- <footer class="centered">
         <p>
@@ -42,9 +41,5 @@
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
-    <script src="../scripts/index.js"></script>
-    <script>
-        document.getElementById("description").innerHTML += `This page uses Geode version ${GEODE_VERSION} and Geometry Dash version ${GD_VERSION}.`;
-    </script>
 </body>
 </html>

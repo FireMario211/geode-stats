@@ -3,12 +3,30 @@
 }
 
 .os-stats {
-    width: 300px;
+    min-width: 300px;
 }
 
-#operating-systems {
+@media screen and (min-width: 950px) {
+    #operating-systems {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 950px) {
+    #operating-systems {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.os-div {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
 }
 
 a {

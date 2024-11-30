@@ -17,14 +17,6 @@
     font-size: 80px;
 }
 
-.os-percentage {
-    color: white;
-    margin-left: 10px;
-    font-family: "Quicksand", sans-serif;
-    font-weight: 600;
-    font-size: 80px;
-}
-
 a {
     color: white;
 }
@@ -38,18 +30,6 @@ a {
 .os-bars {
     display: flex;
     align-items: center;
-}
-
-.os-bar-completed {
-    height: 80px;
-    width: 35%;
-}
-
-.os-bar-remaining {
-    background-color: #606060;
-    opacity: 0.75;
-    height: 80px;
-    width: 35%;
 }
 
 .os-label {
@@ -68,40 +48,4 @@ a {
 
 .os-label p {
     text-align: center;
-}
-
-#windows-bar-completed {
-    background-color: #0078d6;
-}
-
-#android-bar-completed {
-    background-color: #3ddc84;
-}
-
-#android-32-bar-completed {
-    background-color: #3ddc84;
-}
-
-#android-64-bar-completed {
-    background-color: #3ddc84;
-}
-
-#android-32-64-bar-completed {
-    background-color: #3ddc84;
-}
-
-#macos-bar-completed {
-    background-color: #000000;
-}
-
-#macos-intel-bar-completed {
-    background-color: #000000;
-}
-
-#macos-arm-bar-completed {
-    background-color: #000000;
-}
-
-#macos-intel-arm-bar-completed {
-    background-color: #000000;
 }

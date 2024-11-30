@@ -16,11 +16,9 @@
 </head>
 <body>
     <nav>
-        <img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo">
-        <p id="title">Geode Statistics</p>
+        <a href=".."><img id="geode-logo" src="../images/geode-logo.svg" alt="Geode Logo"></a>
         <ul>
-            <li><a href="..">Home</a></li>
-            <li><a href="#">Statistics</a>
+            <li><a href="#">Geode Statistics</a>
                 <ul>
                     <li><a href="../os-support">OS Support</a></li>
                     <li><a href="../os-percentage">OS Percentage</a></li>
@@ -28,7 +26,6 @@
                 </ul>
             </li>
         </ul>
-        <img id="author-logo" src="../images/justin-cube.png" alt="Author Logo">
         <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
     </nav>
 
@@ -63,6 +60,7 @@
         // get "gd" and "geode" from query string
         const urlParams = new URLSearchParams(window.location.search);
         const mods = await getMods(urlParams.get("gd"), urlParams.get("geode"));
+        const developers = await getDevelopers();
 
         let currentSort = "totalDownloads";
         const reverses = {
@@ -109,6 +107,19 @@
                     else found.unfeaturedMods++;
                     found.totalDownloads += mod.downloads;
                 }
+            }
+
+            for (const developer of developers) {
+                if (developerPoints.findIndex(x => x.id == developer.id) < 0) developerPoints.push({
+                    id: developer.id,
+                    name: developer.display_name,
+                    link: "https://geode-sdk.org/mods?developer=" + developer.username,
+                    points: 0,
+                    totalMods: 0,
+                    unfeaturedMods: 0,
+                    featuredMods: 0,
+                    totalDownloads: 0
+                });
             }
 
             switch (sortBy) {
