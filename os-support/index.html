@@ -101,7 +101,7 @@
             $(`#${id}-dropdown`).toggleClass("hidden", !dropdownState[id]);
             $(`#${id}-button`).html(dropdownState[id] ? "\u25BC" : "\u25BA");
         }
-    
+
         const urlParams = new URLSearchParams(window.location.search);
         const mods = await getMods(urlParams.get("gd"), urlParams.get("geode"));
 

@@ -6,11 +6,11 @@ function modToName(mod, platform) {
 
 function convertGD(gd, version) {
     return {
-        win: gd.win == version || gd.win == "*" || version.length <= 0 ? gd.win : "",
-        android32: gd.android32 == version || gd.android32 == "*" || version.length <= 0 ? gd.android32 : "",
-        android64: gd.android64 == version || gd.android64 == "*" || version.length <= 0 ? gd.android64 : "",
-        "mac-intel": gd["mac-intel"] == version || gd["mac-intel"] == "*" || version.length <= 0 ? gd["mac-intel"] : "",
-        "mac-arm": gd["mac-arm"] == version || gd["mac-arm"] == "*" || version.length <= 0 ? gd["mac-arm"] : "",
+        win: gd.win == version || gd.win == "*" || version == null ? gd.win : null,
+        android32: gd.android32 == version || gd.android32 == "*" || version == null ? gd.android32 : null,
+        android64: gd.android64 == version || gd.android64 == "*" || version == null ? gd.android64 : null,
+        "mac-intel": gd["mac-intel"] == version || gd["mac-intel"] == "*" || version == null ? gd["mac-intel"] : null,
+        "mac-arm": gd["mac-arm"] == version || gd["mac-arm"] == "*" || version == null ? gd["mac-arm"] : null,
     }
 }
 
@@ -30,30 +30,29 @@ function responseToMod(response, gd) {
 }
 
 async function getMods(gd, geode) {
+    const modsKey = `mods-${gd}-${geode}`
+    if (sessionStorage && sessionStorage.getItem(modsKey)) return JSON.parse(sessionStorage.getItem(modsKey));
+
     const mods = [];
 
-    if (sessionStorage && sessionStorage.getItem("mods")) return JSON.parse(sessionStorage.getItem("mods"));
-
-    let gdVersion = gd != null ? gd : "";
-    let geodeVersion = geode != null ? geode : "";
-    const baseURL = `https://api.geode-sdk.org/v1/mods?per_page=100${gdVersion ? `&gd=${gdVersion}` : ""}${geodeVersion ? `&geode=${geodeVersion}` : ""}`;
+    const baseURL = `https://api.geode-sdk.org/v1/mods?per_page=100${gd != null ? `&gd=${gd}` : ""}${geode != null ? `&geode=${geode}` : ""}`;
     const page1 = await fetch(baseURL).then(r => r.json());
-    mods.push(...page1.payload.data.map(res => responseToMod(res, gdVersion)));
+    mods.push(...page1.payload.data.map(res => responseToMod(res, gd)));
     const maxPage = Math.ceil(page1.payload.count / 100);
     for (let i = 2; i <= maxPage; i++) {
         const page = await fetch(`${baseURL}&page=${i}`).then(r => r.json());
-        mods.push(...page.payload.data.map(res => responseToMod(res, gdVersion)));
+        mods.push(...page.payload.data.map(res => responseToMod(res, gd)));
     }
 
-    if (sessionStorage) sessionStorage.setItem("mods", JSON.stringify(mods));
+    if (sessionStorage) sessionStorage.setItem(modsKey, JSON.stringify(mods));
 
     return mods;
 }
 
 async function getDevelopers() {
-    const developers = [];
-
     if (sessionStorage && sessionStorage.getItem("developers")) return JSON.parse(sessionStorage.getItem("developers"));
+
+    const developers = [];
 
     const baseURL = "https://api.geode-sdk.org/v1/developers?per_page=100";
     const page1 = await fetch(baseURL).then(r => r.json());
