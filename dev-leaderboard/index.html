@@ -31,8 +31,8 @@
 
     <h1 class="centered">Developer Leaderboard</h1>
     <div class="centered">
-        <label for="co-developers">Include Co-Developers</label>
         <input type="checkbox" id="co-developers">
+        <label for="co-developers">Co-Developers</label>
     </div>
     <table id="leaderboard-table" class="tablesorter">
         <thead>
@@ -73,6 +73,19 @@
             featuredMods: false
         };
 
+        function formatNum(num) {
+            return Intl.NumberFormat().format(num);
+        }
+
+        function levelToColor(level) {
+            switch (level) {
+                case 1: return "#a379c0";
+                case 2: return "#ca869f";
+                case 3: return "#df8f8f";
+                default: return "white";
+            }
+        }
+
         function getDeveloperPoints(sortBy = "rank", changeReverse = true) {
             const developerPoints = [];
 
@@ -96,7 +109,8 @@
                             totalMods: 0,
                             unfeaturedMods: 0,
                             featuredMods: 0,
-                            totalDownloads: 0
+                            totalDownloads: 0,
+                            level: 1
                         });
                         found = developerPoints[developerPoints.length - 1];
                     }
@@ -110,7 +124,8 @@
             }
 
             for (const developer of developers) {
-                if (developerPoints.findIndex(x => x.id == developer.id) < 0) developerPoints.push({
+                const foundIndex = developerPoints.findIndex(x => x.id == developer.id);
+                if (foundIndex < 0) developerPoints.push({
                     id: developer.id,
                     name: developer.display_name,
                     link: "https://geode-sdk.org/mods?developer=" + developer.username,
@@ -118,8 +133,10 @@
                     totalMods: 0,
                     unfeaturedMods: 0,
                     featuredMods: 0,
-                    totalDownloads: 0
+                    totalDownloads: 0,
+                    level: developer.admin ? 3 : developer.verified ? 2 : 0
                 });
+                else developerPoints[foundIndex].level = developer.admin ? 3 : developer.verified ? 2 : 1;
             }
 
             switch (sortBy) {
@@ -146,10 +163,6 @@
                     break;
             }
 
-            function formatNum(num) {
-                return Intl.NumberFormat().format(num);
-            }
-
             let rank = 0;
             $("#leaderboard").html("");
             for (const developer of developerPoints) {
@@ -172,7 +185,7 @@
                 const textStyle = `style="color: ${rank > 3 ? "white" : "black"};"`;
                 row.html(`
                     <td ${textStyle}>${rank}</td>
-                    <td ${textStyle}><a href="${developer.link}" ${textStyle}>${developer.name}</a></td>
+                    <td ${textStyle}><a href="${developer.link}" style="color: ${rank > 3 ? levelToColor(developer.level) : "black"}">${developer.name}</a></td>
                     <td ${textStyle}>${formatNum(developer.totalDownloads)}</td>
                     <td ${textStyle}>${formatNum(developer.points)}</td>
                     <td ${textStyle}>${formatNum(developer.totalMods)}</td>
