@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./index.css">
     <meta property="og:title" content="OS Percentage - Geode Statistics" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://geode-stats.hiimjustin000.com" />
+    <meta property="og:url" content="https://geode-stats.hiimjasmine00.com" />
     <meta property="og:description" content="Percentage of mods that support different operating systems in Geode, a Geometry Dash mod loader." />
     <meta name="theme-color" content="#8E7AD0">
     <title>OS Percentage - Geode Statistics</title>
@@ -20,13 +20,13 @@
         <ul>
             <li><a href="#">Geode Statistics</a>
                 <ul>
-                    <li><a href="../os-support">OS Support</a></li>
+                    <li><a href="javascript:goToPage('/os-support')">OS Support</a></li>
                     <li><a href="#">OS Percentage</a></li>
-                    <li><a href="../dev-leaderboard">Developer Leaderboard</a></li>
+                    <li><a href="javascript:goToPage('/dev-leaderboard')">Developer Leaderboard</a></li>
                 </ul>
             </li>
         </ul>
-        <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
+        <p id="author">by <a href="https://www.hiimjasmine00.com">hiimjasmine00</a></p>
     </nav>
 
     <h1 class="centered">Operating System Percentage</h1>
@@ -85,10 +85,16 @@
             </div>
             <canvas id="macos-intel-arm-bar" height="80" class="os-bar"></canvas>
         </div>
+        <div class="os-bars">
+            <div class="os-label">
+                <img src="../images/ios.svg" class="os-icon" alt="iOS Logo">
+            </div>
+            <canvas id="ios-bar" height="80" class="os-bar"></canvas>
+        </div>
     </div>
     <!-- <footer class="centered">
         <p>
-            Website by <a href="https://www.hiimjustin000.com">hiimjustin000</a>. This website is not affiliated with
+            Website by <a href="https://www.hiimjasmine00.com">hiimjasmine00</a>. This website is not affiliated with
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
@@ -104,7 +110,8 @@
             macOS: 0,
             macOSIntel: 0,
             macOSARM: 0,
-            macOSIntelAndARM: 0
+            macOSIntelAndARM: 0,
+            iOS: 0,
         }
 
         const osPercentages = {
@@ -116,7 +123,8 @@
             macOS: 0,
             macOSIntel: 0,
             macOSARM: 0,
-            macOSIntelAndARM: 0
+            macOSIntelAndARM: 0,
+            iOS: 0,
         }
 
         function setPercentage(percentage, label) {
@@ -127,7 +135,7 @@
             percentageContext.clearRect(0, 0, percentageCanvas.width, percentageCanvas.height);
             percentageContext.fillStyle = "#606060";
             percentageContext.fillRect(0, 0, percentageCanvas.width, percentageCanvas.height);
-            percentageContext.fillStyle = label.startsWith("android") ? "#3ddc84" : label.startsWith("macos") ? "#000000" : "#0078d6";
+            percentageContext.fillStyle = label.startsWith("android") ? "#3ddc84" : label.startsWith("macos") || label.startsWith("ios") ? "#000000" : "#0078d6";
             percentageContext.fillRect(0, 0, percentage * 0.01 * percentageCanvas.width, percentageCanvas.height);
             percentageContext.font = "800 80px 'Quicksand'";
             percentageContext.fillStyle = "#ffffff";
@@ -145,6 +153,7 @@
         setPercentage(0, "macos-intel");
         setPercentage(0, "macos-arm");
         setPercentage(0, "macos-intel-arm");
+        setPercentage(0, "ios");
 
         addEventListener("resize", () => {
             setPercentage(osPercentages.windows, "windows");
@@ -156,6 +165,7 @@
             setPercentage(osPercentages.macOSIntel, "macos-intel");
             setPercentage(osPercentages.macOSARM, "macos-arm");
             setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
+            setPercentage(osPercentages.iOS, "ios");
         });
 
         document.fonts.ready.then(() => {
@@ -168,6 +178,7 @@
             setPercentage(osPercentages.macOSIntel, "macos-intel");
             setPercentage(osPercentages.macOSARM, "macos-arm");
             setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
+            setPercentage(osPercentages.iOS, "ios");
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -183,6 +194,7 @@
             if (mod.gd["mac-intel"]) osSums.macOSIntel++;
             if (mod.gd["mac-arm"]) osSums.macOSARM++;
             if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSums.macOSIntelAndARM++;
+            if (mod.gd.ios) osSums.iOS++;
         }
 
         osPercentages.windows = osSums.windows / mods.length * 100;
@@ -194,6 +206,7 @@
         osPercentages.macOSIntel = osSums.macOSIntel / mods.length * 100;
         osPercentages.macOSARM = osSums.macOSARM / mods.length * 100;
         osPercentages.macOSIntelAndARM = osSums.macOSIntelAndARM / mods.length * 100;
+        osPercentages.iOS = osSums.iOS / mods.length * 100;
 
         setPercentage(osPercentages.windows, "windows");
         setPercentage(osPercentages.android, "android");
@@ -204,6 +217,7 @@
         setPercentage(osPercentages.macOSIntel, "macos-intel");
         setPercentage(osPercentages.macOSARM, "macos-arm");
         setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
+        setPercentage(osPercentages.iOS, "ios");
     </script>
 </body>
 </html>

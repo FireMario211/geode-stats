@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./index.css">
     <meta property="og:title" content="Developer Leaderboard - Geode Statistics" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://geode-stats.hiimjustin000.com" />
+    <meta property="og:url" content="https://geode-stats.hiimjasmine00.com" />
     <meta property="og:description" content="The leaderboard of developers with the most mods in Geode, a Geometry Dash mod loader." />
     <meta name="theme-color" content="#8E7AD0">
     <title>Developer Leaderboard - Geode Statistics</title>
@@ -20,13 +20,13 @@
         <ul>
             <li><a href="#">Geode Statistics</a>
                 <ul>
-                    <li><a href="../os-support">OS Support</a></li>
-                    <li><a href="../os-percentage">OS Percentage</a></li>
+                    <li><a href="javascript:goToPage('/os-support')">OS Support</a></li>
+                    <li><a href="javascript:goToPage('/os-percentage')">OS Percentage</a></li>
                     <li><a href="#">Developer Leaderboard</a></li>
                 </ul>
             </li>
         </ul>
-        <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
+        <p id="author">by <a href="https://www.hiimjasmine00.com">hiimjasmine00</a></p>
     </nav>
 
     <h1 class="centered">Developer Leaderboard</h1>
@@ -39,6 +39,7 @@
             <tr>
                 <th id="leaderboard-rank">Rank</th>
                 <th id="leaderboard-developer">Developer</th>
+                <th id="leaderboard-downloads-per-mod">Downloads per Mod</th>
                 <th id="leaderboard-total-downloads">Total Downloads</th>
                 <th id="leaderboard-points">Developer Points</th>
                 <th id="leaderboard-total-mods">Total Mods</th>
@@ -50,7 +51,7 @@
     </table>
     <!-- <footer class="centered">
         <p>
-            Website by <a href="https://www.hiimjustin000.com">hiimjustin000</a>. This website is not affiliated with
+            Website by <a href="https://www.hiimjasmine00.com">hiimjasmine00</a>. This website is not affiliated with
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
@@ -86,6 +87,16 @@
             }
         }
 
+        function hasPlatform(mod, platform) {
+            if (!mod.gd[platform]) switch (platform) {
+                case "windows": return mod.gd.win;
+                case "android": return mod.gd.android32 || mod.gd.android64;
+                case "mac": case "macos": return mod.gd["mac-arm"] || mod.gd["mac-intel"];
+                default: return false;
+            }
+            return true;
+        }
+
         function getDeveloperPoints(sortBy = "rank", changeReverse = true) {
             const developerPoints = [];
 
@@ -95,6 +106,7 @@
                 for (const key in reverses) reverses[key] = false;
             }
 
+            const platform = urlParams.get("platform") || "";
             for (const mod of mods) {
                 for (const developer of mod.developers) {
                     if (!$("#co-developers").prop("checked") && !developer.is_owner) continue;
@@ -104,7 +116,7 @@
                         developerPoints.push({
                             id: developer.id,
                             name: developer.display_name,
-                            link: "https://geode-sdk.org/mods?developer=" + developer.username,
+                            link: "https://geode-sdk.org/developers/" + developer.id,
                             points: 0,
                             totalMods: 0,
                             unfeaturedMods: 0,
@@ -115,6 +127,8 @@
                         found = developerPoints[developerPoints.length - 1];
                     }
 
+                    if (platform.length > 0 && !hasPlatform(mod, platform)) continue;
+
                     found.points += mod.featured ? 2 : 1;
                     found.totalMods++;
                     if (mod.featured) found.featuredMods++;
@@ -123,12 +137,13 @@
                 }
             }
 
+            const emptyDevelopers = [];
             for (const developer of developers) {
                 const foundIndex = developerPoints.findIndex(x => x.id == developer.id);
-                if (foundIndex < 0) developerPoints.push({
+                if (foundIndex < 0) emptyDevelopers.push({
                     id: developer.id,
                     name: developer.display_name,
-                    link: "https://geode-sdk.org/mods?developer=" + developer.username,
+                    link: "https://geode-sdk.org/developers/" + developer.id,
                     points: 0,
                     totalMods: 0,
                     unfeaturedMods: 0,
@@ -139,12 +154,19 @@
                 else developerPoints[foundIndex].level = developer.admin ? 3 : developer.verified ? 2 : 1;
             }
 
+            for (const developer of emptyDevelopers) {
+                if (developerPoints.findIndex(x => x.id == developer.id) < 0) developerPoints.push(developer);
+            }
+
             switch (sortBy) {
                 case "rank":
                     developerPoints.sort((a, b) => reverses.rank ? a.totalDownloads - b.totalDownloads : b.totalDownloads - a.totalDownloads);
                     break;
                 case "developer":
                     developerPoints.sort((a, b) => reverses.developer ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name));
+                    break;
+                case "downloadsPerMod":
+                    developerPoints.sort((a, b) => reverses.downloadsPerMod ? a.totalDownloads / a.totalMods - b.totalDownloads / b.totalMods : b.totalDownloads / b.totalMods - a.totalDownloads / a.totalMods);
                     break;
                 case "totalDownloads":
                     developerPoints.sort((a, b) => reverses.totalDownloads ? a.totalDownloads - b.totalDownloads : b.totalDownloads - a.totalDownloads);
@@ -186,6 +208,7 @@
                 row.html(`
                     <td ${textStyle}>${rank}</td>
                     <td ${textStyle}><a href="${developer.link}" style="color: ${rank > 3 ? levelToColor(developer.level) : "black"}">${developer.name}</a></td>
+                    <td ${textStyle}>${formatNum(developer.totalDownloads / developer.totalMods)}</td>
                     <td ${textStyle}>${formatNum(developer.totalDownloads)}</td>
                     <td ${textStyle}>${formatNum(developer.points)}</td>
                     <td ${textStyle}>${formatNum(developer.totalMods)}</td>
@@ -200,6 +223,7 @@
 
         $("#leaderboard-rank").on("click", () => getDeveloperPoints("rank"));
         $("#leaderboard-developer").on("click", () => getDeveloperPoints("developer"));
+        $("#leaderboard-downloads-per-mod").on("click", () => getDeveloperPoints("downloadsPerMod"));
         $("#leaderboard-total-downloads").on("click", () => getDeveloperPoints("totalDownloads"));
         $("#leaderboard-points").on("click", () => getDeveloperPoints("points"));
         $("#leaderboard-total-mods").on("click", () => getDeveloperPoints("totalMods"));

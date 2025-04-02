@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./index.css">
     <meta property="og:title" content="OS Support - Geode Statistics" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://geode-stats.hiimjustin000.com" />
+    <meta property="og:url" content="https://geode-stats.hiimjasmine00.com" />
     <meta property="og:description" content="Support for different operating systems in Geode, a Geometry Dash mod loader." />
     <meta name="theme-color" content="#8E7AD0">
     <title>OS Support - Geode Statistics</title>
@@ -21,12 +21,12 @@
             <li><a href="#">Geode Statistics</a>
                 <ul>
                     <li><a href="#">OS Support</a></li>
-                    <li><a href="../os-percentage">OS Percentage</a></li>
-                    <li><a href="../dev-leaderboard">Developer Leaderboard</a></li>
+                    <li><a href="javascript:goToPage('/os-percentage')">OS Percentage</a></li>
+                    <li><a href="javascript:goToPage('/dev-leaderboard')">Developer Leaderboard</a></li>
                 </ul>
             </li>
         </ul>
-        <p id="author">by <a href="https://www.hiimjustin000.com">hiimjustin000</a></p>
+        <p id="author">by <a href="https://www.hiimjasmine00.com">hiimjasmine00</a></p>
     </nav>
 
     <h1 class="centered">Operating System Support</h1>
@@ -64,10 +64,16 @@
             <p class="os-stats" id="macos-only-intel-stats"></p>
             <p class="os-stats" id="macos-only-arm-stats"></p>
         </div>
+        <div class="os-div">
+            <img src="../images/ios.svg" class="os-icon" alt="iOS Logo">
+            <p class="os-stats" id="ios-stats"></p>
+            <p class="os-stats" id="ios-only-stats"></p>
+            <p class="os-stats" id="not-ios-stats"></p>
+        </div>
     </div>
     <!-- <footer class="centered">
         <p>
-            Website by <a href="https://www.hiimjustin000.com">hiimjustin000</a>. This website is not affiliated with
+            Website by <a href="https://www.hiimjasmine00.com">hiimjasmine00</a>. This website is not affiliated with
             <a href="https://geode-sdk.org">Geode</a> or <a href="https://www.robtopgames.com">RobTop Games</a>.
         </p>
     </footer> -->
@@ -93,7 +99,10 @@
             "macos-only": false,
             "not-macos": false,
             "macos-only-intel": false,
-            "macos-only-arm": false
+            "macos-only-arm": false,
+            ios: false,
+            "ios-only": false,
+            "not-ios": false
         };
 
         window.onDropdownButton = function (id) {
@@ -124,19 +133,22 @@
             onlyMacOS: [],
             notMacOS: [],
             macOSOnlyIntel: [],
-            macOSOnlyARM: []
+            macOSOnlyARM: [],
+            ios: [],
+            iosOnly: [],
+            notIOS: []
         };
 
         $("#total").html(`Total Mods: ${mods.length}`);
         for (const mod of mods) {
             if (mod.gd.win) osSupport.windows.push(mod);
-            if (mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.onlyWindows.push(mod);
+            if (mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"] && !mod.gd.ios) osSupport.onlyWindows.push(mod);
             if (!mod.gd.win) osSupport.notWindows.push(mod);
             if (mod.gd.android32) osSupport.android32.push(mod);
             if (mod.gd.android64) osSupport.android64.push(mod);
             if (mod.gd.android32 || mod.gd.android64) osSupport.android.push(mod);
             if (mod.gd.android32 && mod.gd.android64) osSupport.android32and64.push(mod);
-            if (!mod.gd.win && (mod.gd.android32 || mod.gd.android64) && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.onlyAndroid.push(mod);
+            if (!mod.gd.win && (mod.gd.android32 || mod.gd.android64) && !mod.gd["mac-intel"] && !mod.gd["mac-arm"] && !mod.gd.ios) osSupport.onlyAndroid.push(mod);
             if (!mod.gd.android32 && !mod.gd.android64) osSupport.notAndroid.push(mod);
             if (mod.gd.android32 && !mod.gd.android64) osSupport.androidOnly32.push(mod);
             if (mod.gd.android64 && !mod.gd.android32) osSupport.androidOnly64.push(mod);
@@ -144,10 +156,13 @@
             if (mod.gd["mac-arm"]) osSupport.macOSARM.push(mod);
             if (mod.gd["mac-intel"] || mod.gd["mac-arm"]) osSupport.macOS.push(mod);
             if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSupport.macOSIntelAndARM.push(mod);
-            if (!mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && (mod.gd["mac-intel"] || mod.gd["mac-arm"])) osSupport.onlyMacOS.push(mod);
+            if (!mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && (mod.gd["mac-intel"] || mod.gd["mac-arm"]) && !mod.gd.ios) osSupport.onlyMacOS.push(mod);
             if (!mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.notMacOS.push(mod);
             if (mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.macOSOnlyIntel.push(mod);
             if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) osSupport.macOSOnlyARM.push(mod);
+            if (mod.gd.ios) osSupport.ios.push(mod);
+            if (mod.gd.ios && !mod.gd.win && !mod.gd.android32 && !mod.gd.android64 && !mod.gd["mac-intel"] && !mod.gd["mac-arm"]) osSupport.iosOnly.push(mod);
+            if (!mod.gd.ios) osSupport.notIOS.push(mod);
         }
 
         function createLabelWithDropdownStats(label, amount, id) {
@@ -178,6 +193,10 @@
         createLabelWithDropdownStats("Only Intel", osSupport.macOSOnlyIntel.length, "macos-only-intel");
         createLabelWithDropdownStats("Only ARM", osSupport.macOSOnlyARM.length, "macos-only-arm");
 
+        createLabelWithDropdownStats("iOS", osSupport.ios.length, "ios");
+        createLabelWithDropdownStats("iOS-only", osSupport.iosOnly.length, "ios-only");
+        createLabelWithDropdownStats("Not on iOS", osSupport.notIOS.length, "not-ios");
+
         function updateSupport() {
             for (const os in osSupport) {
                 osSupport[os].sort((a, b) => $("#alphabetical").is(":checked") ? a.name.localeCompare(b.name) : b.downloads - a.downloads);
@@ -204,6 +223,10 @@
             $("#not-macos-dropdown").html(osSupport.notMacOS.map(x => modToName(x, "")).join("<br>"));
             $("#macos-only-intel-dropdown").html(osSupport.macOSOnlyIntel.map(x => modToName(x, "mac-intel")).join("<br>"));
             $("#macos-only-arm-dropdown").html(osSupport.macOSOnlyARM.map(x => modToName(x, "mac-arm")).join("<br>"));
+
+            $("#ios-dropdown").html(osSupport.ios.map(x => modToName(x, "")).join("<br>"));
+            $("#ios-only-dropdown").html(osSupport.iosOnly.map(x => modToName(x, "")).join("<br>"));
+            $("#not-ios-dropdown").html(osSupport.notIOS.map(x => modToName(x, "")).join("<br>"));
         }
 
         $("#alphabetical").on("change", updateSupport);

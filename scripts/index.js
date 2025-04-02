@@ -11,6 +11,7 @@ function convertGD(gd, version) {
         android64: gd.android64 == version || gd.android64 == "*" || version == null ? gd.android64 : null,
         "mac-intel": gd["mac-intel"] == version || gd["mac-intel"] == "*" || version == null ? gd["mac-intel"] : null,
         "mac-arm": gd["mac-arm"] == version || gd["mac-arm"] == "*" || version == null ? gd["mac-arm"] : null,
+        ios: gd.ios == version || gd.ios == "*" || version == null ? gd.ios : null,
     }
 }
 
@@ -66,4 +67,13 @@ async function getDevelopers() {
     if (sessionStorage) sessionStorage.setItem("developers", JSON.stringify(developers));
 
     return developers;
+}
+
+function goToPage(page) {
+    const url = new URL(window.location.origin + page);
+    const searchParams = new URLSearchParams(window.location.search);
+    for (const [key, value] of searchParams.entries()) {
+        url.searchParams.set(key, value);
+    }
+    window.location.assign(url);
 }
