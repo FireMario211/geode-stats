@@ -198,6 +198,19 @@
         createLabelWithDropdownStats("iOS-only", osSupport.iosOnly.length, "ios-only");
         createLabelWithDropdownStats("Not on iOS", osSupport.notIOS.length, "not-ios");
 
+        function platformsToString(gd) {
+            const platforms = [];
+            if (gd.win) platforms.push("Windows");
+            if (gd.android32 && gd.android64) platforms.push("Android");
+            else if (gd.android32) platforms.push("32-bit Android");
+            else if (gd.android64) platforms.push("64-bit Android");
+            if (gd["mac-intel"] && gd["mac-arm"]) platforms.push("macOS");
+            else if (gd["mac-intel"]) platforms.push("Intel macOS");
+            else if (gd["mac-arm"]) platforms.push("ARM macOS");
+            if (gd.ios) platforms.push("iOS");
+            return " (" + platforms.join(", ") + ")</a>";
+        }
+
         function updateSupport() {
             for (const os in osSupport) {
                 osSupport[os].sort((a, b) => $("#alphabetical").is(":checked") ? a.name.localeCompare(b.name) : b.downloads - a.downloads);
@@ -205,14 +218,14 @@
 
             $("#windows-dropdown").html(osSupport.windows.map(x => modToName(x, "win")).join("<br>"));
             $("#windows-only-dropdown").html(osSupport.onlyWindows.map(x => modToName(x, "win")).join("<br>"));
-            $("#not-windows-dropdown").html(osSupport.notWindows.map(x => modToName(x, "")).join("<br>"));
+            $("#not-windows-dropdown").html(osSupport.notWindows.map(x => modToName(x, "").slice(0, -4) + platformsToString(x.gd)).join("<br>"));
 
             $("#android-dropdown").html(osSupport.android.map(x => modToName(x, x.gd["android64"] ? "android64" : "android32")).join("<br>"));
             $("#android-32-dropdown").html(osSupport.android32.map(x => modToName(x, "android32")).join("<br>"));
             $("#android-64-dropdown").html(osSupport.android64.map(x => modToName(x, "android64")).join("<br>"));
             $("#android-32-64-dropdown").html(osSupport.android32and64.map(x => modToName(x, "android64")).join("<br>"));
             $("#android-only-dropdown").html(osSupport.onlyAndroid.map(x => modToName(x, x.gd["android64"] ? "android64" : "android32")).join("<br>"));
-            $("#not-android-dropdown").html(osSupport.notAndroid.map(x => modToName(x, "")).join("<br>"));
+            $("#not-android-dropdown").html(osSupport.notAndroid.map(x => modToName(x, "").slice(0, -4) + platformsToString(x.gd)).join("<br>"));
             $("#android-only-32-dropdown").html(osSupport.androidOnly32.map(x => modToName(x, "android32")).join("<br>"));
             $("#android-only-64-dropdown").html(osSupport.androidOnly64.map(x => modToName(x, "android64")).join("<br>"));
 
@@ -221,13 +234,13 @@
             $("#macos-arm-dropdown").html(osSupport.macOSARM.map(x => modToName(x, "mac-arm")).join("<br>"));
             $("#macos-intel-arm-dropdown").html(osSupport.macOSIntelAndARM.map(x => modToName(x, "mac-arm")).join("<br>"));
             $("#macos-only-dropdown").html(osSupport.onlyMacOS.map(x => modToName(x, x.gd["mac-arm"] ? "mac-arm" : "mac-intel")).join("<br>"));
-            $("#not-macos-dropdown").html(osSupport.notMacOS.map(x => modToName(x, "")).join("<br>"));
+            $("#not-macos-dropdown").html(osSupport.notMacOS.map(x => modToName(x, "").slice(0, -4) + platformsToString(x.gd)).join("<br>"));
             $("#macos-only-intel-dropdown").html(osSupport.macOSOnlyIntel.map(x => modToName(x, "mac-intel")).join("<br>"));
             $("#macos-only-arm-dropdown").html(osSupport.macOSOnlyARM.map(x => modToName(x, "mac-arm")).join("<br>"));
 
             $("#ios-dropdown").html(osSupport.ios.map(x => modToName(x, "")).join("<br>"));
             $("#ios-only-dropdown").html(osSupport.iosOnly.map(x => modToName(x, "")).join("<br>"));
-            $("#not-ios-dropdown").html(osSupport.notIOS.map(x => modToName(x, "")).join("<br>"));
+            $("#not-ios-dropdown").html(osSupport.notIOS.map(x => modToName(x, "").slice(0, -4) + platformsToString(x.gd)).join("<br>"));
         }
 
         $("#alphabetical").on("change", updateSupport);
