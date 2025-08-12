@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -92,6 +91,18 @@
             </div>
             <canvas id="ios-bar" height="80" class="os-bar"></canvas>
         </div>
+        <div class="os-bars">
+            <div class="os-label">
+                <p id="ios-jit-label" class="ios-label">JIT</p>
+            </div>
+            <canvas id="ios-jit-bar" height="80" class="os-bar"></canvas>
+        </div>
+        <div class="os-bars">
+            <div class="os-label">
+                <p id="ios-jitless-label" class="ios-label">JIT-Less</p>
+            </div>
+            <canvas id="ios-jitless-bar" height="80" class="os-bar"></canvas>
+        </div>
     </div>
     <!-- <footer class="centered">
         <p>
@@ -113,6 +124,8 @@
             macOSARM: 0,
             macOSIntelAndARM: 0,
             iOS: 0,
+            iOSJIT: 0,
+            iOSJITLess: 0,
         }
 
         const osPercentages = {
@@ -126,6 +139,8 @@
             macOSARM: 0,
             macOSIntelAndARM: 0,
             iOS: 0,
+            iOSJIT: 0,
+            iOSJITLess: 0,
         }
 
         function setPercentage(percentage, label) {
@@ -154,7 +169,8 @@
         setPercentage(0, "macos-intel");
         setPercentage(0, "macos-arm");
         setPercentage(0, "macos-intel-arm");
-        setPercentage(0, "ios");
+        setPercentage(0, "ios-jit");
+        setPercentage(0, "ios-jitless");
 
         addEventListener("resize", () => {
             setPercentage(osPercentages.windows, "windows");
@@ -167,6 +183,8 @@
             setPercentage(osPercentages.macOSARM, "macos-arm");
             setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
             setPercentage(osPercentages.iOS, "ios");
+            setPercentage(osPercentages.iOSJIT, "ios-jit");
+            setPercentage(osPercentages.iOSJITLess, "ios-jitless");
         });
 
         document.fonts.ready.then(() => {
@@ -180,6 +198,8 @@
             setPercentage(osPercentages.macOSARM, "macos-arm");
             setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
             setPercentage(osPercentages.iOS, "ios");
+            setPercentage(osPercentages.iOSJIT, "ios-jit");
+            setPercentage(osPercentages.iOSJITLess, "ios-jitless");
         });
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -195,7 +215,13 @@
             if (mod.gd["mac-intel"]) osSums.macOSIntel++;
             if (mod.gd["mac-arm"]) osSums.macOSARM++;
             if (mod.gd["mac-intel"] && mod.gd["mac-arm"]) osSums.macOSIntelAndARM++;
-            if (mod.gd.ios) osSums.iOS++;
+            if (mod.gd.ios) {
+                osSums.iOS++;
+                osSums.iOSJITLess++;
+                if ((mod.geode) >= "4.6.0") {
+                    osSums.iOSJITLess++;
+                }
+            }
         }
 
         osPercentages.windows = osSums.windows / mods.length * 100;
@@ -208,6 +234,8 @@
         osPercentages.macOSARM = osSums.macOSARM / mods.length * 100;
         osPercentages.macOSIntelAndARM = osSums.macOSIntelAndARM / mods.length * 100;
         osPercentages.iOS = osSums.iOS / mods.length * 100;
+        osPercentages.iOSJIT = osSums.iOSJIT / mods.length * 100;
+        osPercentages.iOSJITLess = osSums.iOSJITLess / mods.length * 100;
 
         setPercentage(osPercentages.windows, "windows");
         setPercentage(osPercentages.android, "android");
@@ -219,6 +247,8 @@
         setPercentage(osPercentages.macOSARM, "macos-arm");
         setPercentage(osPercentages.macOSIntelAndARM, "macos-intel-arm");
         setPercentage(osPercentages.iOS, "ios");
+        setPercentage(osPercentages.iOSJIT, "ios-jit");
+        setPercentage(osPercentages.iOSJITLess, "ios-jitless");
     </script>
 </body>
 </html>
