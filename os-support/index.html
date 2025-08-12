@@ -168,8 +168,7 @@
             if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) osSupport.macOSOnlyARM.push(mod);
             if (mod.gd.ios) {
                 osSupport.ios.push(mod);
-                let version = mod.geode && mod.geode.split(".");
-                if (version.length >= 2 && parseInt(version[0]) >= 4 && parseInt(version[1]) >= 6) {
+                 if (mod.geode >= "4.6.0") {
                     osSupport.iosJITLess.push(mod);
                 } else {
                     osSupport.iosJITOnly.push(mod);
@@ -256,7 +255,7 @@
             $("#ios-dropdown").html(osSupport.ios.map(x => modToName(x, "")).join("<br>"));
             $("#ios-only-dropdown").html(osSupport.iosOnly.map(x => modToName(x, "")).join("<br>"));
             $("#not-ios-dropdown").html(osSupport.notIOS.map(x => modToName(x, "").slice(0, -4) + platformsToString(x.gd)).join("<br>"));
-            $("#ios-jit-dropdown").html(osSupport.iosJITLess.map(x => modToName(x, "")).join("<br>"));
+            $("#ios-jit-dropdown").html(osSupport.iosJITOnly.map(x => modToName(x, "")).join("<br>"));
             $("#ios-jitless-dropdown").html(osSupport.iosJITLess.map(x => modToName(x, "")).join("<br>"));
         }
 
