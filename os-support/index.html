@@ -168,7 +168,8 @@
             if (mod.gd["mac-arm"] && !mod.gd["mac-intel"]) osSupport.macOSOnlyARM.push(mod);
             if (mod.gd.ios) {
                 osSupport.ios.push(mod);
-                if ((mod.geode) >= "4.6.0") {
+                let version = mod.geode && mod.geode.split(".");
+                if (version.length >= 2 && parseInt(version[0]) >= 4 && parseInt(version[1]) >= 6) {
                     osSupport.iosJITLess.push(mod);
                 } else {
                     osSupport.iosJITOnly.push(mod);
